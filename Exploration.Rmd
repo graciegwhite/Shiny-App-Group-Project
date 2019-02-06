@@ -15,3 +15,23 @@ library(tidyverse)
 testdata <- read_csv("Testdata.csv")
 ```
 
+CHASE'S Section:
+
+
+
+
+ANDREW'S Section:
+
+
+
+
+
+GRACIE's Section:
+
+
+
+
+
+
+
+
