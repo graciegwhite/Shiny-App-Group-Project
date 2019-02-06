@@ -7,12 +7,12 @@ library(shinythemes)
 ##Copy and pasted from last lab, we can change all the details but keep some structure?
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-  theme = shinytheme("cerulean"),
+  theme = shinytheme("flatly"),
   
   # Application title
-  titlePanel("244 Example: Old Faithful Geyser Data"),
+  titlePanel("Bren Student Personality Quiz Data"),
   
-  navbarPage("Here's a main title!",
+  navbarPage("Expecto Enneagram!",
              
              tabPanel("Summary",
                       h1("A header!"),
@@ -24,7 +24,7 @@ ui <- fluidPage(
                       
              ),
              
-             tabPanel("Histogram",
+             tabPanel("Enneagram Types",
                       
                       # Sidebar with a slider input for number of bins 
                       sidebarLayout(
@@ -47,7 +47,23 @@ ui <- fluidPage(
                       )),
              
              
-             tabPanel("Scatterplot",
+             tabPanel("Patronuses",
+                      
+                      # Sidebar with a slider input for number of bins 
+                      sidebarLayout(
+                        sidebarPanel(
+                          
+                          radioButtons("scattercolor", 
+                                       "Select scatterplot color:",
+                                       choices = c("red","blue","gray50"))
+                        ),
+                        
+                        # Show a plot of the generated distribution
+                        mainPanel(
+                          plotOutput("scatter")
+                        )
+                      )),
+             tabPanel("Spatial Data",
                       
                       # Sidebar with a slider input for number of bins 
                       sidebarLayout(
