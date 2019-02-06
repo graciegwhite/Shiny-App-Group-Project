@@ -15,7 +15,9 @@ library(tidyverse)
 testdata <- read_csv("Testdata.csv")
 ```
 
-<<<<<<< HEAD
+
+CHASE:
+
 ```{r}
 feb_6_test <- read_csv("Data_2_6.csv")
 
@@ -25,8 +27,74 @@ test_lm
 
 summary(test_lm)
 ```
-=======
-CHASE'S Section:
+
+```{r}
+# Basic data exploring - histograms and what not
+
+house_bar <- ggplot(feb_6_test, aes(x = House)) +
+  geom_bar()
+
+house_bar
+
+enneagram_bar <- ggplot(feb_6_test, aes(x = Enneagram)) +
+  geom_bar()
+
+enneagram_bar
+
+sign_bar <- ggplot(feb_6_test, aes(x = Sign)) +
+  geom_bar()
+
+sign_bar
+
+intro_bar <- ggplot(feb_6_test, aes(x = Introverted)) +
+  geom_bar()
+
+intro_bar
+
+brigs_bar <- ggplot(feb_6_test, aes(x = Brigs)) +
+  geom_bar()
+
+brigs_bar
+
+color_bar <- ggplot(feb_6_test, aes(x = Color)) +
+  geom_bar()
+
+color_bar
+
+dog_bar <- ggplot(feb_6_test, aes(x = Dog)) +
+  geom_bar()
+
+dog_bar
+
+age_bar <- ggplot(feb_6_test, aes(x = Age)) +
+  geom_bar()
+
+age_bar
+
+specialization_bar <- ggplot(feb_6_test, aes(x = Specialization)) +
+  geom_bar()
+
+specialization_bar
+
+year_bar <- ggplot(feb_6_test, aes(x = Year)) +
+  geom_bar()
+
+year_bar
+
+state_bar <- ggplot(feb_6_test, aes(x = State)) +
+  geom_bar()
+
+state_bar
+```
+
+```{r}
+## In theory, for displaying enneagram distrobutions on a circular graph by a specific group (ie, hufflepuffs):
+
+# data set %>% 
+# group_by(~input selection(Hogwarts House)) %>% 
+# filter(~input selection 1 (hogwarts house) == input selection 2 ("Hufflepuff")) %>% 
+# ggplot or whatever for circular graph
+```
 
 
 
