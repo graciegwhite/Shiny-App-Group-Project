@@ -15,3 +15,13 @@ library(tidyverse)
 testdata <- read_csv("Testdata.csv")
 ```
 
+```{r}
+feb_6_test <- read_csv("Data_2_6.csv")
+
+test_lm <- lm(Enneagram ~ Specialization + Sign + State + Color + House + Brigs, data = feb_6_test)
+
+test_lm
+
+summary(test_lm)
+```
+
