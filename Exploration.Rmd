@@ -15,6 +15,7 @@ library(tidyverse)
 testdata <- read_csv("Testdata.csv")
 ```
 
+<<<<<<< HEAD
 ```{r}
 feb_6_test <- read_csv("Data_2_6.csv")
 
@@ -24,4 +25,25 @@ test_lm
 
 summary(test_lm)
 ```
+=======
+CHASE'S Section:
+
+
+
+
+ANDREW'S Section:
+
+
+
+
+
+GRACIE's Section:
+
+
+
+
+
+
+
+>>>>>>> 6a05e4216ab5d915f413d6b5c2526a6aa835929e
 
