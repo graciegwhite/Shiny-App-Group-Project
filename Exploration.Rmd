@@ -11,6 +11,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(tidyverse)
+library(tidyr)
+
+final_df <- read_csv("updatedfinal.csv")
 
 testdata <- read_csv("Testdata.csv")
 ```
@@ -107,11 +110,37 @@ ANDREW'S Section:
 
 GRACIE's Section:
 
+OK so making a chi-square test set up:
+
+
+```{r}
+
+#this was all a mistake do not go down this route lets just graph things
+
+prop_df <- final_df %>% 
+  select(-Timestamp) %>% 
+  na.omit(prop_df$`What is your name?`)
+  
+row.names(prop_df) <- prop_df$`What is your name?` 
+
+
+
+prop_df_namesgone <- prop_df %>% 
+  select(-`What is your name?`, -`Age?`, -`What is your Pottermore Patronus?`, -`What is you favorite R Color? Example, peachpuff2 (See NCEAS link above)`, -`What is your favorite color?`, -`What is your home state/country?`, `What is your Enneagram personality type "wing"?`)
 
 
 
 
 
 
->>>>>>> 6a05e4216ab5d915f413d6b5c2526a6aa835929e
+
+```
+
+
+
+
+
+
+
+
 

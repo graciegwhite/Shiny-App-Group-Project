@@ -15,12 +15,16 @@ ui <- fluidPage(
   navbarPage("Expecto Enneagram!",
              
              tabPanel("Summary",
-                      h1("A header!"),
-                      h2("A secondary header..."),
+                      h1("Welcome!"),
+                      h2("How it all began..."),
                       p("Then some paragraph text. Old Faithful Geyser Data Description: Waiting time between eruptions and the duration of the eruption for the Old Faithful geyser in Yellowstone National Park, Wyoming, USA."),
                       p("Followed by another paragraph of text..."),
-                      h1("Then another header"),
-                      p("You get the idea...)")
+                      h1("Here's a quick snapshot of our data:"),
+                      p("You get the idea...)"),
+                      h2("Specialization Responses"),
+                      h2("Hogwarts House Responses"),
+                      h2("Enneagram Types"),
+                      h2("Astrology Signs")
                       
              ),
              
