@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse)
 library(tidyr)
+library(datapasta)
 
 final_df <- read_csv("updatedfinal.csv")
 
@@ -129,13 +130,24 @@ prop_df_namesgone <- prop_df %>%
   select(-`What is your name?`, -`Age?`, -`What is your Pottermore Patronus?`, -`What is you favorite R Color? Example, peachpuff2 (See NCEAS link above)`, -`What is your favorite color?`, -`What is your home state/country?`, `What is your Enneagram personality type "wing"?`)
 
 
+```
+
+
+```{r}
+#Ok switching gears to patronus danger ratings. I'm going to make a vector in excel of the ratings, then use datapasta to copy them in as a vector, and mutate it into the dataframe. 
+
+
+Danger_ratings <- c("50", "92", "2", "60", "68", "22", "3", "9", "68", "90", "12", "7", "17", "4", NA, "17", "11", "8", NA, "87", "4", "6", "19", "7", NA, "18", "4", "9", "9", "9", "2", "68", "56", "5", NA, "30", "11", "7", "2", "15", NA, "62", "9", "16", "3", "60", "13", "15", "87", "15", "5", "17", "18")
+
+final_df$Danger_Rating <- Danger_ratings
+
+#datapasta is magical and i can't beleive that worked wow
 
 
 
 
 
 ```
-
 
 
 
