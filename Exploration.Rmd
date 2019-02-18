@@ -142,10 +142,69 @@ Danger_ratings <- c("50", "92", "2", "60", "68", "22", "3", "9", "68", "90", "12
 final_df$Danger_Rating <- Danger_ratings
 
 #datapasta is magical and i can't beleive that worked wow
+final_df$Danger_Rating <- as.numeric(final_df$Danger_Rating)
+
+#explore!
+
+gram_vs_danger <- ggplot(final_df, aes(x = `What is your Enneagram personalty type?`, y = Danger_Rating)) + 
+  geom_point(aes(color = `What is your Hogwarts House?`))
+  
+gram_vs_danger
+
+#no real corellation between enneagram and danger
+#The hufflepuffs are not dangerous lol 
 
 
+#myers briggs and danger:
+
+briggs_vs_danger <- ggplot(final_df, aes(x = `What is your Myers Briggs personality type (if you know it)?`, y = Danger_Rating)) + 
+  geom_point(aes(color = `What is your Hogwarts House?`)) + 
+  theme(legend.position = "bottom")
+  
+briggs_vs_danger
+
+#INFJs are mostl hufflepuff
+#ENFPs are not dangerous
+
+#someone messed up and wrote ENJF instead of ENFJ
 
 
+extrovert_vs_danger <- ggplot(final_df, aes(x = `What is your Enneagram personalty type?`, y = Danger_Rating)) + 
+  geom_point(aes(color = `Are you more introverted or extroverted?`)) + 
+  theme(legend.position = "bottom")
+  
+extrovert_vs_danger
+
+#introverts are more dangerous
+#enneagram type 7 is almost all extrovert, 4 and 5 are all introverts
+
+
+dogcat_vs_danger <- ggplot(final_df, aes(x = `What is your Enneagram personalty type?`, y = Danger_Rating)) + 
+  geom_point(aes(color = `Are you a dog or cat person?`)) + 
+  theme(legend.position = "bottom")
+  
+dogcat_vs_danger
+
+#cat people are most in enneagram type 3, and then 6, no cat people in type 1 or 6
+
+color_vs_danger <- ggplot(final_df, aes(x = `What is your favorite color?`, y = Danger_Rating)) + 
+  geom_point() + 
+  theme(legend.position = "bottom")
+  
+color_vs_danger
+
+#yellows are not dangerous
+
+
+class_vs_danger <- ggplot(final_df, aes(x = `What is your specialization/area of study?`, y = Danger_Rating)) + 
+  geom_point(aes(color = `What is your program/year (i.e. MESM 2020)?`)) + 
+  theme(legend.position = "bottom")
+  
+class_vs_danger
+
+#no real correlation with program year
+
+#cp and EC are not dangerous
 
 ```
 
