@@ -208,6 +208,35 @@ class_vs_danger
 
 #cp and EC are not dangerous
 
+age_vs_danger <- ggplot(final_df, aes(x = `Age?`, y = Danger_Rating)) + 
+  geom_point() +
+  theme(legend.position = "bottom")
+  
+age_vs_danger
+
+
+sign_vs_danger <- ggplot(final_df, aes(x = `Astrological Sign?`, y = Danger_Rating)) + 
+  geom_point() +
+  theme(legend.position = "bottom")
+  
+sign_vs_danger
+
+#sagitarius is dangerous and picies/gemini is not dangerous. capricorn kinda dangerous. 
+
+state_vs_danger <- ggplot(final_df, aes(x = `What is your home state/country?`, y = Danger_Rating)) + 
+  geom_point(aes(color = `What is your Hogwarts House?`)) +
+  theme(legend.position = "bottom")
+  
+state_vs_danger
+#not really enough data on this one since almost everyone is from california
+
+#this model needs help lol .. maybe we rethink this section. Instead of a linear model maybe it's just a visualization, and you see where you stack up in comparison to others in your group 
+danger_lm <- lm(Danger_Rating ~ `What is your Hogwarts House?`+ `Are you more introverted or extroverted?` + `Astrological Sign?`, data = final_df)
+
+summary(danger_lm)
+
+
+
 ```
 
 
