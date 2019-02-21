@@ -11,6 +11,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(tidyverse)
+library(tidyr)
+library(datapasta)
+
+final_df <- read_csv("updatedfinal.csv")
 
 testdata <- read_csv("Testdata.csv")
 ```
@@ -119,6 +123,133 @@ ANDREW'S Section:
 
 GRACIE's Section:
 
+OK so making a chi-square test set up:
+
+
+```{r}
+
+#this was all a mistake do not go down this route lets just graph things
+
+prop_df <- final_df %>% 
+  select(-Timestamp) %>% 
+  na.omit(prop_df$`What is your name?`)
+  
+row.names(prop_df) <- prop_df$`What is your name?` 
+
+
+
+prop_df_namesgone <- prop_df %>% 
+  select(-`What is your name?`, -`Age?`, -`What is your Pottermore Patronus?`, -`What is you favorite R Color? Example, peachpuff2 (See NCEAS link above)`, -`What is your favorite color?`, -`What is your home state/country?`, `What is your Enneagram personality type "wing"?`)
+
+
+```
+
+
+```{r}
+#Ok switching gears to patronus danger ratings. I'm going to make a vector in excel of the ratings, then use datapasta to copy them in as a vector, and mutate it into the dataframe. 
+
+
+Danger_ratings <- c("50.4", "57.6", "2.4", "71.2", "68", "40", "3", "6.4", "69.2", "93.4", "23.4", "35.4", "34.2", "3", NA, "34.8", "29.2", "6.4", NA, "92.2", "5.4", "4.4", "15", "5.6", NA, "13.4", "3", "6", "6", "7.2", "9.4", "69.2", "58.8", "4.4", NA, "40.8", "9", "5.4", "2", "17.8", NA, "65", "8.4", "30.6", "3", "67.8", "25.2", "21.4", "92.6", "17.8", "16.8", "28.4", "23.8")
+
+
+
+final_df$Danger_Rating <- Danger_ratings
+
+#datapasta is magical and i can't beleive that worked wow
+final_df$Danger_Rating <- as.numeric(final_df$Danger_Rating)
+
+#explore!
+
+gram_vs_danger <- ggplot(final_df, aes(x = `What is your Enneagram personalty type?`, y = Danger_Rating)) + 
+  geom_point(aes(color = `What is your Hogwarts House?`))
+  
+gram_vs_danger
+
+#no real corellation between enneagram and danger
+#The hufflepuffs are not dangerous lol 
+
+
+#myers briggs and danger:
+
+briggs_vs_danger <- ggplot(final_df, aes(x = `What is your Myers Briggs personality type (if you know it)?`, y = Danger_Rating)) + 
+  geom_point(aes(color = `What is your Hogwarts House?`)) + 
+  theme(legend.position = "bottom")
+  
+briggs_vs_danger
+
+#INFJs are mostl hufflepuff
+#ENFPs are not dangerous
+
+#someone messed up and wrote ENJF instead of ENFJ
+
+
+extrovert_vs_danger <- ggplot(final_df, aes(x = `What is your Enneagram personalty type?`, y = Danger_Rating)) + 
+  geom_point(aes(color = `Are you more introverted or extroverted?`)) + 
+  theme(legend.position = "bottom")
+  
+extrovert_vs_danger
+
+#introverts are more dangerous
+#enneagram type 7 is almost all extrovert, 4 and 5 are all introverts
+
+
+dogcat_vs_danger <- ggplot(final_df, aes(x = `What is your Enneagram personalty type?`, y = Danger_Rating)) + 
+  geom_point(aes(color = `Are you a dog or cat person?`)) + 
+  theme(legend.position = "bottom")
+  
+dogcat_vs_danger
+
+#cat people are most in enneagram type 3, and then 6, no cat people in type 1 or 6
+
+color_vs_danger <- ggplot(final_df, aes(x = `What is your favorite color?`, y = Danger_Rating)) + 
+  geom_point() + 
+  theme(legend.position = "bottom")
+  
+color_vs_danger
+
+#yellows are not dangerous
+
+
+class_vs_danger <- ggplot(final_df, aes(x = `What is your specialization/area of study?`, y = Danger_Rating)) + 
+  geom_point(aes(color = `What is your program/year (i.e. MESM 2020)?`)) + 
+  theme(legend.position = "bottom")
+  
+class_vs_danger
+
+#no real correlation with program year
+
+#cp and EC are not dangerous
+
+age_vs_danger <- ggplot(final_df, aes(x = `Age?`, y = Danger_Rating)) + 
+  geom_point() +
+  theme(legend.position = "bottom")
+  
+age_vs_danger
+
+
+sign_vs_danger <- ggplot(final_df, aes(x = `Astrological Sign?`, y = Danger_Rating)) + 
+  geom_point() +
+  theme(legend.position = "bottom")
+  
+sign_vs_danger
+
+#sagitarius is dangerous and picies/gemini is not dangerous. capricorn kinda dangerous. 
+
+state_vs_danger <- ggplot(final_df, aes(x = `What is your home state/country?`, y = Danger_Rating)) + 
+  geom_point(aes(color = `What is your Hogwarts House?`)) +
+  theme(legend.position = "bottom")
+  
+state_vs_danger
+#not really enough data on this one since almost everyone is from california
+
+#this model needs help lol .. maybe we rethink this section. Instead of a linear model maybe it's just a visualization, and you see where you stack up in comparison to others in your group 
+danger_lm <- lm(Danger_Rating ~ `What is your Hogwarts House?`+ `Are you more introverted or extroverted?` + `Astrological Sign?`, data = final_df)
+
+summary(danger_lm)
+
+
+
+```
 
 
 
@@ -126,4 +257,8 @@ GRACIE's Section:
 
 
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 0272eae9fa256f50eb3e1150fdb2294ada234240
 

@@ -1,0 +1,48 @@
+---
+title: "Andrew Exploration"
+author: "Andrew Paterson"
+date: "February 6, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+library(tidyverse)
+library(sf)
+library(tmap)
+library(leaflet)
+library(ggrepel)
+library(ggspatial)
+library(RColorBrewer)
+library(raster)
+
+```
+
+```{r}
+
+us_states <- read_sf(".", layer = "cb_2017_us_state_500k")
+
+st_crs(us_states) = 4326
+
+plot(us_states)
+
+states <- read_sf(".", layer = "cb_2017_us_state_500k") %>%
+  dplyr::select(NAME, geometry) %>% 
+  rename(State = NAME) %>%
+  st_simplify(dTolerance = 100) %>% 
+  st_transform(crs = 4326) #if no existing system, use st_crs. can also check system with st_crs(ca_eco)
+
+plot(states)
+
+```
+
+```{r}
+
+plot(states)
+
+```
+
