@@ -21,11 +21,23 @@ CHASE:
 ```{r}
 feb_6_test <- read_csv("Data_2_6.csv")
 
+feb_6_test$Enneagram <- as.factor(feb_6_test$Enneagram)
+
 test_lm <- lm(Enneagram ~ Specialization + Sign + State + Color + House + Brigs, data = feb_6_test)
 
 test_lm
 
 summary(test_lm)
+
+test_lm2 <- lm(Enneagram ~ Sign + House, data = feb_6_test)
+
+test_lm2
+
+sign_house <- ggplot(feb_6_test, aes(x = House, y = Sign)) +
+  geom_point() +
+  geom_jitter()
+
+sign_house
 ```
 
 ```{r}
@@ -113,5 +125,5 @@ GRACIE's Section:
 
 
 
->>>>>>> 6a05e4216ab5d915f413d6b5c2526a6aa835929e
+
 
