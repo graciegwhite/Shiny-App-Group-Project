@@ -38,6 +38,17 @@ states <- read_sf(".", layer = "cb_2017_us_state_500k") %>%
 
 plot(states)
 
+#Trying with different syntax learned in lab 7.
+
+states2 <- read_sf(dsn = 'states', layer = "cb_2017_us_state_500k") %>% 
+  dplyr::select(NAME) %>% 
+  st_simplify(dTolerance = 10) %>% 
+  st_transform(crs = 4326)
+
+#Having trouble figuring out how to withdraw/identify the information I need from the US States shapefiles. The parallels to when we did this in lab 7 aren't immediately obvious to me. Geometry isn't staying sticky.
+
+plot(islands)
+
 ```
 
 ```{r}
