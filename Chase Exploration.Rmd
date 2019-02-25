@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
 
-final_data <- read_csv("updatedfinal.csv")
+final_data <- read_csv("Personality_Quiz/updatedfinal.csv")
 
 data <- read_csv("data2.17.19.csv")
 
