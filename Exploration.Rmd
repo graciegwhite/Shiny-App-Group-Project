@@ -14,7 +14,7 @@ library(tidyverse)
 library(tidyr)
 library(datapasta)
 
-final_df <- read_csv("updatedfinal.csv")
+final_df <- read_csv("Personality_Quiz/updatedfinal.csv")
 
 testdata <- read_csv("Testdata.csv")
 ```
