@@ -1,0 +1,33 @@
+---
+title: "Chase Exploration"
+author: "Chase Brewster"
+date: "2/21/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+
+final_data <- read_csv("updatedfinal.csv")
+
+data <- read_csv("data2.17.19.csv")
+
+chase_data <- read_csv("Chase.csv")
+```
+
+```{r}
+
+# going to try to make a dot density plot and make it polar
+
+dot_density_1 <- chase_data %>% 
+  filter(Enneagram != "NA") %>% 
+  filter(Extroverted == "Extroverted") %>% 
+  ggplot(aes(x = Enneagram)) +
+  geom_bar() +
+  coord_polar()
+
+dot_density_1
+```
+
