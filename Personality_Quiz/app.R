@@ -4,6 +4,7 @@ library(shiny)
 library(tidyverse)
 library(shinythemes)
 library(readr)
+library(ggplot2)
 
 ##Copy and pasted from last lab, we can change all the details but keep some structure?
 # Define UI for application that draws a histogram
@@ -69,26 +70,34 @@ ui <- fluidPage(
              
              tabPanel("Patronuses",
                       
-                      # Sidebar with a slider input for number of bins 
+                      
+                      # Sidebar with a slider input for number of bins
                       sidebarLayout(
                         sidebarPanel(
-                          
                           radioButtons(
-                                       inputId = "x",
-                                       label = "Select one:",
-                                       choices = c("Enneagram Type","Myers Briggs","Specialization", "Astrological Sign"), 
-                                       selected = "Myers Briggs"),
+                            inputId = "x",
+                            label = "Select one:",
+                            choices = c(
+                              'Enneagram Type',
+                              'Myers Briggs',
+                              'Specialization',
+                              'Astrological Sign'
+                            ),
+                            selected = "Myers Briggs"
+                          ),
                           radioButtons(
-                                       inputId = "variable",
-                                       label = "Select one:",
-                                       choices = c("Hogwarts House", "Cat vs Dog", "Introvert vs Extrovert"),
-                                       selected = "Hogwarts House")
-                        ),
+                            inputId = "variable",
+                            label = "Select one:",
+                            choices = c('Hogwarts House',
+                                        'Cat vs Dog',
+                                        'Introvert vs Extrovert'
+                                        ),
+                            selected = "Hogwarts House"
+                          )
+                        ), 
                         
                         # Show a plot of the generated distribution
-                        mainPanel(
-                          plotOutput(outputId = "scatter")
-                        )
+                        mainPanel(plotOutput(outputId = "scatter"))
                       )),
              
              
@@ -122,8 +131,8 @@ server <- function(input, output) {
   #panel2 - patronuses
   output$scatter <- renderPlot({
     
-    ggplot(data = final_df, aes(x = input$x, y = final_df$`Patronus Danger Rating`)) +
-      geom_point(aes(color = input$variable))
+    ggplot(data = final_df, aes_string(x = input$x, y = final_df$`Patronus Danger Rating`)) +
+      geom_point(aes_string(color = input$variable))
       
     
   })
