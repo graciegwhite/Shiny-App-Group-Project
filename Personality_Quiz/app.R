@@ -17,10 +17,13 @@ final_df$Danger_Rating <- Danger_ratings
 #datapasta is magical and i can't beleive that worked wow
 final_df$Danger_Rating <- as.numeric(final_df$Danger_Rating)
 
-colnames(final_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological Sign", "Home State", "Favorite Color", "Cat vs Dog", "Hogwarts House", "Patronus", "Introvert vs Extrovert", "Myers-Briggs", "Enneagram Type", "Enneagram Wing", "Favorite R Color", "Patronus Danger Rating")
+colnames(final_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological Sign", "Home State", "Favorite Color", "Cat vs Dog", "Hogwarts House", "Patronus", "Introvert vs Extrovert", "Myers Briggs", "Enneagram Type", "Enneagram Wing", "Favorite R Color", "Patronus Danger Rating")
 
-
-
+#subsets for patronuses:
+x_var <- final_df %>% 
+  select(Specialization, `Astrological Sign`, `Myers Briggs`, `Enneagram Type`)
+color_var <- final_df %>% 
+  select(`Cat vs Dog`, `Hogwarts House`, `Introvert vs Extrovert`)
 
 ui <- fluidPage(
   theme = shinytheme("flatly"),
@@ -72,22 +75,14 @@ ui <- fluidPage(
                       # Sidebar with a slider input for number of bins 
                       sidebarLayout(
                         sidebarPanel(
+                          selectInput('x', 'X Variable', names(x_var)),
+                          selectInput('colorVar', 'Y Variable', names(color_var))
                           
-                          radioButtons(
-                                       inputId = "x",
-                                       label = "Select one:",
-                                       choices = c("Enneagram Type","Myers-Briggs","Specialization", "Astrological Sign"), 
-                                       selected = "Myers-Briggs"),
-                          radioButtons(
-                                       inputId = "variable",
-                                       label = "Select one:",
-                                       choices = c("Hogwarts House", "Dog vs Cat", "Introvert vs Extrovert"),
-                                       selected = "Hogwarts House")
                         ),
                         
                         # Show a plot of the generated distribution
                         mainPanel(
-                          plotOutput(outputId = "scatter")
+                          plotOutput("scatter")
                         )
                       )),
              
@@ -98,26 +93,20 @@ ui <- fluidPage(
                       sidebarLayout(
                         sidebarPanel(
                           
-                          radioButtons("scattercolor", 
+                          radioButtons("title", 
                                        "Select scatterplot color:",
                                        choices = c("red","blue","gray50"))
                         ),
                         
                         # Show a plot of the generated distribution
                         mainPanel(
-                          plotOutput("scatter")
+                          plotOutput("tbd")
                         )
                       ))
              
   )
   
 )
-
-
-
-
-
-
 
 
 
@@ -128,8 +117,8 @@ server <- function(input, output) {
   #panel2 - patronuses
   output$scatter <- renderPlot({
     
-    ggplot(data = final_df, aes_string(x = input$x, y = `Patronus Danger Rating`)) +
-      geom_point(aes(color = input$variable))
+    ggplot(data = final_df, aes(x = input$x, y = final_df$`Patronus Danger Rating`)) +
+      geom_point(aes(color = input$color_var))
       
     
   })
