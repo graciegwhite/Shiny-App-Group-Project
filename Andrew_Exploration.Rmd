@@ -38,7 +38,7 @@ states <- read_sf(".", layer = "cb_2017_us_state_500k") %>%
 
 plot(states)
 
-#Trying with different syntax learned in lab 7.
+#Trying with slightly different syntax learned in lab 7.
 
 states2 <- read_sf(dsn = 'states', layer = "cb_2017_us_state_500k") %>% 
   dplyr::select(NAME) %>% 
@@ -49,11 +49,43 @@ states2 <- read_sf(dsn = 'states', layer = "cb_2017_us_state_500k") %>%
 
 plot(islands)
 
+#Trying with a different shapefile
+
+states_sf <- read_sf(".", layer = "states")
+
+st_crs(states_sf) = 4326
+
+states3 <- read_sf(dsn = "states", layer = "states") %>% 
+  dplyr::select(STATE_NAME) %>% 
+  st_simplify(dTolerance = 10) %>% 
+  st_transform(crs = 4326)
+
+plot(states3)
+
+#Gives a weird kite-shaped map with "STATE_NAME" title. Geometries are not staying sticky.
+
 ```
 
 ```{r}
 
-plot(states)
+#Trying with Allison's shapefiles from lab 7. Why do these stay sticky, but the esri and census bureau shapefiles I tried do not?
+
+states_map1 <- read_sf(dsn = "states", layer = "cb_2017_us_state_20m") %>% 
+  dplyr::select(NAME) %>%
+  filter(NAME != "Puerto Rico",
+         NAME != "Hawaii",
+         NAME != "Alaska") %>% 
+  st_transform(crs = 4326)
+
+plot(states_map1)
+
+```
+
+```{r}
+
+#adding layer of points for home state
+
+
 
 ```
 
