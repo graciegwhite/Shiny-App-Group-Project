@@ -9,6 +9,8 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
+library(plotly)
+library(RColorBrewer)
 
 final_data <- read_csv("Personality_Quiz/updatedfinal.csv")
 
@@ -19,15 +21,66 @@ chase_data <- read_csv("Chase.csv")
 
 ```{r}
 
-# going to try to make a dot density plot and make it polar
+# going to try to make a bar plot and make it polar
 
-dot_density_1 <- chase_data %>% 
+chase_data$Enneagram <- as.character(chase_data$Enneagram)
+
+y_br <- c(1,2,3,4,5,6,7,8,9)
+x_lab <- c("1", "2", "3", "4", "5", "6", "7", "8", "9")
+
+bar_1 <- chase_data %>% 
+  filter(Enneagram != "NA") %>% 
+  filter(State == "California") %>% 
+  ggplot(aes(x = Enneagram, fill = Enneagram)) +
+  geom_bar(color = "grey") +
+  geom_text(stat = "count", 
+            aes(label =..count..), 
+            color = "white",
+            nudge_y = -0.3,
+            size = 3,
+            vjust = "inward") +
+  coord_polar(theta = "x") +
+  theme_minimal() +
+  scale_x_discrete(drop=FALSE) +
+  scale_y_discrete(drop=FALSE) +
+  scale_fill_discrete(drop=FALSE) +
+  theme(axis.line = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        axis.text.y = element_blank(),
+        axis.text.x = element_text(color = "black", size = 10))
+        
+
+bar_1
+
+ggplotly(bar_1)
+```
+
+```{r}
+
+chase_data2 <- chase_data
+
+chase_data2$Enneagram <- as.numeric(chase_data2$Enneagram)
+
+y_br <- c(1,2,3,4,5,6,7,8,9)
+x_lab <- c("1", "2", "3", "4", "5", "6", "7", "8", "9")
+
+hist_1 <- chase_data2 %>% 
   filter(Enneagram != "NA") %>% 
   filter(Extroverted == "Extroverted") %>% 
   ggplot(aes(x = Enneagram)) +
-  geom_bar() +
-  coord_polar()
+  geom_histogram(bins = 9, aes(color = Enneagram)) +
+  coord_polar(theta = "x") +
+  theme_minimal() +
+  theme(axis.line = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        axis.text.y = element_blank(),
+        axis.text.x = element_text(color = "black", size = 10)) +
+  scale_y_continuous(breaks = y_br, labels = x_lab) +
+  scale_fill_brewer(palette = "Set1")
+        
 
-dot_density_1
+hist_1
 ```
 
