@@ -67,7 +67,7 @@ plot(states3)
 ```
 
 ```{r}
-
+#PARTIAL SUCCESS HERE:
 #Trying with Allison's shapefiles from lab 7. Why do these stay sticky, but the esri and census bureau shapefiles I tried do not?
 
 states_map1 <- read_sf(dsn = "states", layer = "cb_2017_us_state_20m") %>% 
@@ -83,9 +83,15 @@ plot(states_map1)
 
 ```{r}
 
-#adding layer of points for home state
+#adding layer of points for home state. Proof of concept that it works with the voles layer from lab.  
+
+#How do we develop a map layer that shows a randomly generated point within each state, or centrally located within each state? To show the distribution of certain personality traits. This page has coordinates for the geographic center in each state. Do you think it would be possible to make this into a csv and reference that as a layer?: https://en.wikipedia.org/wiki/List_of_geographic_centers_of_the_United_States.
 
 
+tm_shape(states_map1)+
+  tm_fill()+
+  tm_shape(voles)+
+  tm_dots(size = 0.2)
 
 ```
 
