@@ -4,7 +4,6 @@ library(shiny)
 library(tidyverse)
 library(shinythemes)
 library(readr)
-library(ggplot2)
 
 ##Copy and pasted from last lab, we can change all the details but keep some structure?
 # Define UI for application that draws a histogram
@@ -53,7 +52,7 @@ ui <- fluidPage(
                                       inputId = "column",
                                       label = h3("Select Category"),
                                       choices = list("Age", "Astrologial Sign", "Bren Specialization", "Dog or Cat", "Extroverted or Introverted", "Favorite Color", "Hogwarts House", "Myers-Briggs Personality Type", "Year")
-                                      )
+                                      ),
                           uiOutput("secondSelection")
                         )
                       )),
@@ -61,33 +60,11 @@ ui <- fluidPage(
              
              tabPanel("Patronuses",
                       
-                      
-                      # Sidebar with a slider input for number of bins
+                      # Sidebar with a slider input for number of bins 
                       sidebarLayout(
                         sidebarPanel(
+                          
                           radioButtons(
-<<<<<<< HEAD
-                            inputId = "x",
-                            label = "Select one:",
-                            choices = c(
-                              'Enneagram Type',
-                              'Myers Briggs',
-                              'Specialization',
-                              'Astrological Sign'
-                            ),
-                            selected = "Myers Briggs"
-                          ),
-                          radioButtons(
-                            inputId = "variable",
-                            label = "Select one:",
-                            choices = c('Hogwarts House',
-                                        'Cat vs Dog',
-                                        'Introvert vs Extrovert'
-                                        ),
-                            selected = "Hogwarts House"
-                          )
-                        ), 
-=======
                                        inputId = "x",
                                        label = "Select one:",
                                        choices = c("Enneagram Type","Myers-Briggs","Specialization", "Astrological Sign"), 
@@ -98,10 +75,11 @@ ui <- fluidPage(
                                        choices = c("Hogwarts House", "Dog vs Cat", "Introvert vs Extrovert"),
                                        selected = "Hogwarts House")
                         ),
->>>>>>> d3520f06342250e3f9913f545ae163e7d29d559a
                         
                         # Show a plot of the generated distribution
-                        mainPanel(plotOutput(outputId = "scatter"))
+                        mainPanel(
+                          plotOutput(outputId = "scatter")
+                        )
                       )),
              
              
@@ -138,20 +116,19 @@ ui <- fluidPage(
 server <- function(input, output) {
   
   output$secondSelection <- renderUI({
-    selectInput
+    selectInput(
+      "Select",
+      "Select Group",
+      choices = unique(chase_data[chase_data==input$column)
+    )
   })
   
   
   #panel2 - patronuses
   output$scatter <- renderPlot({
     
-<<<<<<< HEAD
-    ggplot(data = final_df, aes_string(x = input$x, y = final_df$`Patronus Danger Rating`)) +
-      geom_point(aes_string(color = input$variable))
-=======
     ggplot(data = final_df, aes_string(x = input$x, y = `Patronus Danger Rating`)) +
       geom_point(aes(color = input$variable))
->>>>>>> d3520f06342250e3f9913f545ae163e7d29d559a
       
     
   })
