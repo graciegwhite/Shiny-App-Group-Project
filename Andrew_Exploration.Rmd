@@ -66,6 +66,10 @@ plot(states3)
 
 ```
 
+GRACIE AND CHASE:
+
+Here is where the first map worked
+
 ```{r}
 #PARTIAL SUCCESS HERE:
 #Trying with Allison's shapefiles from lab 7. Why do these stay sticky, but the esri and census bureau shapefiles I tried do not?
@@ -81,11 +85,19 @@ plot(states_map1)
 
 ```
 
+
+QUESTIONS FOR ALLISON: 
+
+Successful map above built with Allison's shapefiles from lab 7. Why do these stay sticky, but the esri and census bureau shapefiles I tried do not?
 ```{r}
 
-#adding layer of points for home state. Proof of concept that it works with the voles layer from lab.  
+#adding layer of points for home state. Proof of concept that it works with the voles layer from lab (see below)
 
-#How do we develop a map layer that shows a randomly generated point within each state, or centrally located within each state? To show the distribution of certain personality traits. This page has coordinates for the geographic center in each state. Do you think it would be possible to make this into a csv and reference that as a layer?: https://en.wikipedia.org/wiki/List_of_geographic_centers_of_the_United_States.
+#How do we develop a map layer that shows a randomly generated point within each state, or centrally located within each state? To show the distribution of certain personality traits across the US. This page has coordinates for the geographic center in each state. Do you think it would be possible to make this into a csv and reference that as a layer?: https://en.wikipedia.org/wiki/List_of_geographic_centers_of_the_United_States.
+
+#If not, any other suggestions on where to start looking to convert our home state variable to a plottable variable? 
+
+#Anything we should keep in mind when trying to build a map with selectable features for use in a shiny app?
 
 
 tm_shape(states_map1)+
