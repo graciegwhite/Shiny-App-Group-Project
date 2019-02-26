@@ -18,7 +18,7 @@ final_df$Danger_Rating <- Danger_ratings
 #datapasta is magical and i can't beleive that worked wow
 final_df$Danger_Rating <- as.numeric(final_df$Danger_Rating)
 
-colnames(final_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological Sign", "Home State", "Favorite Color", "Cat vs Dog", "Hogwarts House", "Patronus", "Introvert vs Extrovert", "Myers Briggs", "Enneagram Type", "Enneagram Wing", "Favorite R Color", "Patronus Danger Rating")
+colnames(final_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological Sign", "Home State", "Favorite Color", "Cat vs Dog", "Hogwarts House", "Patronus", "Introvert vs Extrovert", "Myers-Briggs", "Enneagram Type", "Enneagram Wing", "Favorite R Color", "Patronus Danger Rating")
 
 
 
@@ -46,24 +46,15 @@ ui <- fluidPage(
              ),
              
              tabPanel("Enneagram Types",
-                      
-                      # Sidebar with a slider input for number of bins 
+                  
                       sidebarLayout(
                         sidebarPanel(
-                          sliderInput("bins",
-                                      "Number of bins:",
-                                      min = 1,
-                                      max = 50,
-                                      value = 30),
-                          
-                          selectInput("color", 
-                                      "Select histogram color:",
-                                      choices = c("purple","blue","orange"))
-                        ),
-                        
-                        # Show a plot of the generated distribution
-                        mainPanel(
-                          plotOutput("distPlot")
+                          radioButtons("radio",
+                                      inputId = "column",
+                                      label = h3("Select Category"),
+                                      choices = list("Age", "Astrologial Sign", "Bren Specialization", "Dog or Cat", "Extroverted or Introverted", "Favorite Color", "Hogwarts House", "Myers-Briggs Personality Type", "Year")
+                                      )
+                          uiOutput("secondSelection")
                         )
                       )),
              
@@ -75,6 +66,7 @@ ui <- fluidPage(
                       sidebarLayout(
                         sidebarPanel(
                           radioButtons(
+<<<<<<< HEAD
                             inputId = "x",
                             label = "Select one:",
                             choices = c(
@@ -95,6 +87,18 @@ ui <- fluidPage(
                             selected = "Hogwarts House"
                           )
                         ), 
+=======
+                                       inputId = "x",
+                                       label = "Select one:",
+                                       choices = c("Enneagram Type","Myers-Briggs","Specialization", "Astrological Sign"), 
+                                       selected = "Myers-Briggs"),
+                          radioButtons(
+                                       inputId = "variable",
+                                       label = "Select one:",
+                                       choices = c("Hogwarts House", "Dog vs Cat", "Introvert vs Extrovert"),
+                                       selected = "Hogwarts House")
+                        ),
+>>>>>>> d3520f06342250e3f9913f545ae163e7d29d559a
                         
                         # Show a plot of the generated distribution
                         mainPanel(plotOutput(outputId = "scatter"))
@@ -107,14 +111,14 @@ ui <- fluidPage(
                       sidebarLayout(
                         sidebarPanel(
                           
-                          radioButtons("title", 
+                          radioButtons("scattercolor", 
                                        "Select scatterplot color:",
                                        choices = c("red","blue","gray50"))
                         ),
                         
                         # Show a plot of the generated distribution
                         mainPanel(
-                          plotOutput("tbd")
+                          plotOutput("scatter")
                         )
                       ))
              
@@ -124,15 +128,30 @@ ui <- fluidPage(
 
 
 
+
+
+
+
+
+
 # Define server logic required to draw a histogram
 server <- function(input, output) {
+  
+  output$secondSelection <- renderUI({
+    selectInput
+  })
   
   
   #panel2 - patronuses
   output$scatter <- renderPlot({
     
+<<<<<<< HEAD
     ggplot(data = final_df, aes_string(x = input$x, y = final_df$`Patronus Danger Rating`)) +
       geom_point(aes_string(color = input$variable))
+=======
+    ggplot(data = final_df, aes_string(x = input$x, y = `Patronus Danger Rating`)) +
+      geom_point(aes(color = input$variable))
+>>>>>>> d3520f06342250e3f9913f545ae163e7d29d559a
       
     
   })

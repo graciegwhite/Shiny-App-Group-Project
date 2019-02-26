@@ -16,7 +16,14 @@ final_data <- read_csv("Personality_Quiz/updatedfinal.csv")
 
 data <- read_csv("data2.17.19.csv")
 
-chase_data <- read_csv("Chase.csv")
+chase_data <- read_csv("Chase.csv") %>% 
+  rename("Hogwarts House" = House) %>% 
+  rename("Extroverted or Introverted" = Extroverted) %>% 
+  rename("Myers-Briggs Personality Type" = Briggs) %>% 
+  rename("Favorite Color" = Color) %>% 
+  rename("Astrological Sign" = Sign) %>% 
+  rename("Bren Specialization" = Specialization) %>% 
+  rename("Dog or Cat" = Dog)
 ```
 
 ```{r}
