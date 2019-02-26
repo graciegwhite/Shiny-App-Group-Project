@@ -257,8 +257,4 @@ summary(danger_lm)
 
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 0272eae9fa256f50eb3e1150fdb2294ada234240
 
