@@ -20,9 +20,6 @@ final_df$Danger_Rating <- as.numeric(final_df$Danger_Rating)
 #rename so less complicated
 colnames(final_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological_Sign", "Home_State", "Favorite_Color", "Cat_vs_Dog", "Hogwarts_House", "Patronus", "Introvert_vs_Extrovert", "Myers-Briggs", "Enneagram_Type", "Enneagram_Wing", "Favorite_R_Color", "Patronus_Danger_Rating")
 
-
-
-
 ui <- fluidPage(
   theme = shinytheme("flatly"),
   
@@ -57,7 +54,7 @@ ui <- fluidPage(
                           uiOutput("secondSelection")
                         ),
              mainPanel(
-               plotOutput(outputId = "scatter")
+               plotOutput(outputId = "bar")
              ),
                         mainPanel(
                           uiOutput("secondSelection"))
