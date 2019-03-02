@@ -54,9 +54,11 @@ ui <- fluidPage(
                                       choices = list("Age", "Astrologial Sign", "Bren Specialization", "Dog or Cat", "Extroverted or Introverted", "Favorite Color", "Hogwarts House", "Myers-Briggs Personality Type", "Year")
                                       ),
                           uiOutput("secondSelection")
-                        )
-                      )),
-             
+                        ),
+             mainPanel(
+               plotOutput(outputId = "scatter")
+             )
+  )),
              
              tabPanel("Patronuses",
                       
@@ -119,8 +121,33 @@ server <- function(input, output) {
     selectInput(
       "Select",
       "Select Group",
-      choices = unique(chase_data[chase_data==input$column)
+      choices = unique(chase_data==input$column)
     )
+  })
+  
+  output$bar <- renderPlot({
+    chase_data %>% 
+      filter(Enneagram != "NA") %>% 
+      filter(input$column == "secondSelection") %>% 
+      ggplot(aes(x = Enneagram, fill = Enneagram)) +
+      geom_bar(color = "grey") +
+      geom_text(stat = "count", 
+                aes(label =..count..), 
+                color = "white",
+                nudge_y = -0.3,
+                size = 3,
+                vjust = "inward") +
+      coord_polar(theta = "x") +
+      theme_minimal() +
+      scale_x_discrete(drop=FALSE) +
+      scale_y_discrete(drop=FALSE) +
+      scale_fill_discrete(drop=FALSE) +
+      theme(axis.line = element_blank(),
+            axis.ticks = element_blank(),
+            axis.title = element_blank(),
+            axis.text.y = element_blank(),
+            axis.text.x = element_text(color = "black", size = 10))
+    
   })
   
   
