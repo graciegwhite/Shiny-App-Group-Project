@@ -53,22 +53,16 @@ ui <- fluidPage(
                                       inputId = "column",
                                       label = h3("Select Category"),
                                       choices = list("Age", "Astrologial Sign", "Bren Specialization", "Dog or Cat", "Extroverted or Introverted", "Favorite Color", "Hogwarts House", "Myers-Briggs Personality Type", "Year")
-<<<<<<< HEAD
                                       ),
                           uiOutput("secondSelection")
                         ),
              mainPanel(
                plotOutput(outputId = "scatter")
-             )
-  )),
-=======
-                                      )
-                        ),
+             ),
                         mainPanel(
                           uiOutput("secondSelection"))
                       )),
-             
->>>>>>> c7b2257e0012b78cba6ac3648cd6eea5584fdc6e
+
              
              tabPanel("Patronuses",
                       
@@ -132,7 +126,6 @@ server <- function(input, output) {
     selectInput(
       "Select",
       "Select Group",
-<<<<<<< HEAD
       choices = unique(chase_data==input$column)
     )
   })
@@ -162,12 +155,6 @@ server <- function(input, output) {
     
   })
   
-=======
-      choices = unique(chase_data[chase_data==input$column])
-    )
-  })
-
->>>>>>> c7b2257e0012b78cba6ac3648cd6eea5584fdc6e
   
   #panel2 - patronuses
   output$scatter <- renderPlot({
@@ -178,6 +165,7 @@ server <- function(input, output) {
     
      ggplot(data = final_df, aes(x = !!column, y = Patronus_Danger_Rating)) +
        geom_point(aes(color = !!col))
+  })
     
 
     
@@ -187,8 +175,6 @@ server <- function(input, output) {
     
     print("got here")
       
-     
-  })
 }
 
 # Run the application 
