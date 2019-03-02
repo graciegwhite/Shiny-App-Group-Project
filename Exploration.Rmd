@@ -227,7 +227,7 @@ age_vs_danger <- ggplot(final_df, aes(x = `Age?`, y = Danger_Rating)) +
 age_vs_danger
 
 
-sign_vs_danger <- ggplot(final_df, aes(x = `Astrological Sign?`, y = Danger_Rating)) + 
+sign_vs_danger <- ggplot(final_df, aes(x = `Astrological Sign`, y = `Patronus Danger Rating`)) + 
   geom_point() +
   theme(legend.position = "bottom")
   
@@ -248,6 +248,19 @@ danger_lm <- lm(Danger_Rating ~ `What is your Hogwarts House?`+ `Are you more in
 summary(danger_lm)
 
 
+xsubset <- final_df %>% 
+      select(`Enneagram Type`, `Myers-Briggs`, `Specialization`, `Astrological Sign`)
+    var_subset <- final_df %>% 
+      select(`Hogwarts House`, `Dog vs Cat`, `Introvert vs Extrovert`)
+
+
+output$secondSelection <- renderUI({
+    selectInput(
+      "Select",
+      "Select Group",
+      choices = unique(chase_data[chase_data==input$column)
+    )
+  })
 
 ```
 

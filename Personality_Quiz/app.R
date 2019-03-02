@@ -4,6 +4,7 @@ library(shiny)
 library(tidyverse)
 library(shinythemes)
 library(readr)
+library(ggplot2)
 
 ##Copy and pasted from last lab, we can change all the details but keep some structure?
 # Define UI for application that draws a histogram
@@ -16,8 +17,8 @@ final_df$Danger_Rating <- Danger_ratings
 
 #datapasta is magical and i can't beleive that worked wow
 final_df$Danger_Rating <- as.numeric(final_df$Danger_Rating)
-
-colnames(final_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological Sign", "Home State", "Favorite Color", "Cat vs Dog", "Hogwarts House", "Patronus", "Introvert vs Extrovert", "Myers-Briggs", "Enneagram Type", "Enneagram Wing", "Favorite R Color", "Patronus Danger Rating")
+#rename so less complicated
+colnames(final_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological_Sign", "Home_State", "Favorite_Color", "Cat_vs_Dog", "Hogwarts_House", "Patronus", "Introvert_vs_Extrovert", "Myers-Briggs", "Enneagram_Type", "Enneagram_Wing", "Favorite_R_Color", "Patronus_Danger_Rating")
 
 
 
@@ -52,6 +53,7 @@ ui <- fluidPage(
                                       inputId = "column",
                                       label = h3("Select Category"),
                                       choices = list("Age", "Astrologial Sign", "Bren Specialization", "Dog or Cat", "Extroverted or Introverted", "Favorite Color", "Hogwarts House", "Myers-Briggs Personality Type", "Year")
+<<<<<<< HEAD
                                       ),
                           uiOutput("secondSelection")
                         ),
@@ -59,6 +61,14 @@ ui <- fluidPage(
                plotOutput(outputId = "scatter")
              )
   )),
+=======
+                                      )
+                        ),
+                        mainPanel(
+                          uiOutput("secondSelection"))
+                      )),
+             
+>>>>>>> c7b2257e0012b78cba6ac3648cd6eea5584fdc6e
              
              tabPanel("Patronuses",
                       
@@ -69,19 +79,20 @@ ui <- fluidPage(
                           radioButtons(
                                        inputId = "x",
                                        label = "Select one:",
-                                       choices = c("Enneagram Type","Myers-Briggs","Specialization", "Astrological Sign"), 
+                                       choices = c("Enneagram_Type","Myers-Briggs","Specialization", "Astrological Sign"), 
                                        selected = "Myers-Briggs"),
                           radioButtons(
                                        inputId = "variable",
                                        label = "Select one:",
-                                       choices = c("Hogwarts House", "Dog vs Cat", "Introvert vs Extrovert"),
-                                       selected = "Hogwarts House")
-                        ),
-                        
-                        # Show a plot of the generated distribution
-                        mainPanel(
-                          plotOutput(outputId = "scatter")
+                                       choices = c("Hogwarts_House", "Dog_vs_Cat", "Introvert_vs_Extrovert"),
+                                       selected = "Hogwarts_House"
                         )
+                        
+                        
+                        ),
+                        mainPanel(
+                          # Show a plot of the generated distribution
+                          plotOutput(outputId = "scatter"))
                       )),
              
              
@@ -98,7 +109,7 @@ ui <- fluidPage(
                         
                         # Show a plot of the generated distribution
                         mainPanel(
-                          plotOutput("scatter")
+                          plotOutput("tbd")
                         )
                       ))
              
@@ -121,6 +132,7 @@ server <- function(input, output) {
     selectInput(
       "Select",
       "Select Group",
+<<<<<<< HEAD
       choices = unique(chase_data==input$column)
     )
   })
@@ -150,14 +162,32 @@ server <- function(input, output) {
     
   })
   
+=======
+      choices = unique(chase_data[chase_data==input$column])
+    )
+  })
+
+>>>>>>> c7b2257e0012b78cba6ac3648cd6eea5584fdc6e
   
   #panel2 - patronuses
   output$scatter <- renderPlot({
+    column <- sym(input$x)
+    col <- sym(input$variable)
     
-    ggplot(data = final_df, aes_string(x = input$x, y = `Patronus Danger Rating`)) +
-      geom_point(aes(color = input$variable))
+   
+    
+     ggplot(data = final_df, aes(x = !!column, y = Patronus_Danger_Rating)) +
+       geom_point(aes(color = !!col))
+    
+
+    
+
+ 
+    
+    
+    print("got here")
       
-    
+     
   })
 }
 
