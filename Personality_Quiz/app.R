@@ -18,7 +18,7 @@ final_df$Danger_Rating <- Danger_ratings
 #datapasta is magical and i can't beleive that worked wow
 final_df$Danger_Rating <- as.numeric(final_df$Danger_Rating)
 #rename so less complicated
-colnames(final_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological_Sign", "Home_State", "Favorite_Color", "Cat_vs_Dog", "Hogwarts_House", "Patronus", "Introvert_vs_Extrovert", "Myers-Briggs", "Enneagram_Type", "Enneagram_Wing", "Favorite_R_Color", "Patronus_Danger_Rating")
+colnames(final_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological_Sign", "Home_State", "Favorite_Color", "Dog_vs_Cat", "Hogwarts_House", "Patronus", "Introvert_vs_Extrovert", "Myers-Briggs", "Enneagram_Type", "Enneagram_Wing", "Favorite_R_Color", "Patronus_Danger_Rating")
 
 ui <- fluidPage(
   theme = shinytheme("flatly"),
@@ -43,23 +43,20 @@ ui <- fluidPage(
              ),
              
              tabPanel("Enneagram Types",
-                  
+                      
                       sidebarLayout(
                         sidebarPanel(
                           radioButtons("radio",
-                                      inputId = "column",
-                                      label = h3("Select Category"),
-                                      choices = list("Age", "Astrologial Sign", "Bren Specialization", "Dog or Cat", "Extroverted or Introverted", "Favorite Color", "Hogwarts House", "Myers-Briggs Personality Type", "Year")
-                                      ),
-                          uiOutput("secondSelection")
+                                       inputId = "column",
+                                       label = h3("Select Category"),
+                                       choices = list("Age", "Astrologial Sign", "Bren Specialization", "Dog or Cat", "Extroverted or Introverted", "Favorite Color", "Hogwarts House", "Myers-Briggs Personality Type", "Year")
+                          )
                         ),
-             mainPanel(
-               plotOutput(outputId = "bar")
-             ),
                         mainPanel(
+                          plotOutput(outputId = "bar"),
                           uiOutput("secondSelection"))
                       )),
-
+             
              
              tabPanel("Patronuses",
                       
@@ -68,19 +65,17 @@ ui <- fluidPage(
                         sidebarPanel(
                           
                           radioButtons(
-                                       inputId = "x",
-                                       label = "Select one:",
-                                       choices = c("Enneagram_Type","Myers-Briggs","Specialization", "Astrological Sign"), 
-                                       selected = "Myers-Briggs"),
+                            inputId = "x",
+                            label = "Select one:",
+                            choices = c("Enneagram_Type","Myers-Briggs","Specialization", "Astrological_Sign"), 
+                            selected = "Myers-Briggs"),
                           radioButtons(
-                                       inputId = "variable",
-                                       label = "Select one:",
-                                       choices = c("Hogwarts_House", "Dog_vs_Cat", "Introvert_vs_Extrovert"),
-                                       selected = "Hogwarts_House"
-                        )
-                        
-                        
+                            inputId = "variable",
+                            label = "Select one:",
+                            choices = c("Hogwarts_House", "Dog_vs_Cat", "Introvert_vs_Extrovert"),
+                            selected = "Hogwarts_House")
                         ),
+                        
                         mainPanel(
                           # Show a plot of the generated distribution
                           plotOutput(outputId = "scatter"))
@@ -158,20 +153,20 @@ server <- function(input, output) {
     column <- sym(input$x)
     col <- sym(input$variable)
     
-   
     
-     ggplot(data = final_df, aes(x = !!column, y = Patronus_Danger_Rating)) +
-       geom_point(aes(color = !!col))
+    
+    ggplot(data = final_df, aes(x = !!column, y = Patronus_Danger_Rating)) +
+      geom_point(aes(color = !!col))
   })
-    
-
-    
-
- 
-    
-    
-    print("got here")
-      
+  
+  
+  
+  
+  
+  
+  
+  print("got here")
+  
 }
 
 # Run the application 
