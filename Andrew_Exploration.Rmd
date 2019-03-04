@@ -26,7 +26,7 @@ library(raster)
 
 us_states <- read_sf(".", layer = "cb_2017_us_state_500k")
 
-long_lat <- read_csv("long_lat.csv")
+lat_long <- read_csv("long_lat.csv")
 
 st_crs(us_states) = 4326
 
