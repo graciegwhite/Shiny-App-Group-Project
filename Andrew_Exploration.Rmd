@@ -26,6 +26,8 @@ library(raster)
 
 us_states <- read_sf(".", layer = "cb_2017_us_state_500k")
 
+long_lat <- read_csv("long_lat.csv")
+
 st_crs(us_states) = 4326
 
 plot(us_states)
@@ -46,8 +48,6 @@ states2 <- read_sf(dsn = 'states', layer = "cb_2017_us_state_500k") %>%
   st_transform(crs = 4326)
 
 #Having trouble figuring out how to withdraw/identify the information I need from the US States shapefiles. The parallels to when we did this in lab 7 aren't immediately obvious to me. Geometry isn't staying sticky.
-
-plot(islands)
 
 #Trying with a different shapefile
 
@@ -104,6 +104,30 @@ tm_shape(states_map1)+
   tm_fill()+
   tm_shape(voles)+
   tm_dots(size = 0.2)
+
+```
+
+```{r}
+
+shiny_map <- us_states %>% 
+                  leaflet() %>% 
+                  addTiles() %>% 
+                  addPolygons(fillColor = ~factpal(UNIT_TYPE), #color of each polygon
+                              fillOpacity = 1, #the opacity of the polygons
+                              stroke = TRUE, #whether to outline the park boundaries,
+                              color = "black",#color of polygon boundaries 
+                              weight = 0.2, #stroke width in pixels
+                              opacity = 1, #stroke opacity 
+                              label = nps_ca$PARKNAME, #label of park when you hover over it
+                              highlightOptions = highlightOptions(color = "white", weight = 5, bringToFront = TRUE),
+                              labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
+                                                          textsize = "15px",direction = "auto")) %>% #how the park name shows up when you hover over it
+
+                  addLegend("bottomright", pal = factpal, values = ~UNIT_TYPE,
+                            title = "Park Classification", 
+                            opacity = 1)
+                              
+shiny_map
 
 ```
 
