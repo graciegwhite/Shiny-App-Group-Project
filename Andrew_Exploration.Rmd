@@ -109,25 +109,71 @@ tm_shape(states_map1)+
 
 ```{r}
 
-shiny_map <- us_states %>% 
+#This works! But it is missing some aspects before it can be utilized in the shiny app.
+
+# I added the long and lat coordinates for all people into this data frame.  I think we should use this version in shiny (shouldn't affect anything you've done, i just added columns)
+
+df_map <- read_csv("updatedfinal_AP_testing.csv") 
+
+shiny_map <- df_map %>% 
                   leaflet() %>% 
                   addTiles() %>% 
-                  addPolygons(fillColor = ~factpal(UNIT_TYPE), #color of each polygon
-                              fillOpacity = 1, #the opacity of the polygons
-                              stroke = TRUE, #whether to outline the park boundaries,
-                              color = "black",#color of polygon boundaries 
-                              weight = 0.2, #stroke width in pixels
-                              opacity = 1, #stroke opacity 
-                              label = nps_ca$PARKNAME, #label of park when you hover over it
-                              highlightOptions = highlightOptions(color = "white", weight = 5, bringToFront = TRUE),
-                              labelOptions = labelOptions(style = list("font-weight" = "normal", padding = "3px 8px"),
-                                                          textsize = "15px",direction = "auto")) %>% #how the park name shows up when you hover over it
+                  addMarkers(lng = ~df_map$Longitude, lat = ~df_map$Latitude, icon = huff_icon)
 
-                  addLegend("bottomright", pal = factpal, values = ~UNIT_TYPE,
-                            title = "Park Classification", 
-                            opacity = 1)
-                              
 shiny_map
+
+```
+
+```{r}
+#For associating icons with the selection:
+
+#this works for just one icon
+huff_icon <- makeIcon(
+  iconUrl = "https://vignette.wikia.nocookie.net/pottermore/images/5/5e/Hufflepuff_crest.png/revision/latest/scale-to-width-down/180?cb=20111112232427",
+  iconWidth = 17, iconHeight = 30,
+  iconAnchorX = 17, iconAnchorY = 30,
+  shadowUrl = "https://vignette.wikia.nocookie.net/pottermore/images/5/5e/Hufflepuff_crest.png/revision/latest/scale-to-width-down/180?cb=20111112232427",
+  shadowWidth = 17, shadowHeight = 30,
+  shadowAnchorX = 4, shadowAnchorY = 62
+)
+
+#Now we're getting there! This changes the logo based on your answer. We may need to a do a nested if function here? 
+hog_Icons <- icons(
+  iconUrl = ifelse(df_map$`What is your Hogwarts House?` == "Hufflepuff",
+    "https://vignette.wikia.nocookie.net/pottermore/images/5/5e/Hufflepuff_crest.png/revision/latest/scale-to-width-down/180?cb=20111112232427",
+    "http://leafletjs.com/examples/custom-icons/leaf-red.png"
+  ),
+  iconWidth = 17, iconHeight = 30,
+  iconAnchorX = 17, iconAnchorY = 30
+)
+
+#Trying to make an if_else. It works! Just need to find and optimize images:
+
+hog_Icons <- icons(
+  iconUrl = ifelse(df_map$`What is your Hogwarts House?` == "Hufflepuff",
+    "https://vignette.wikia.nocookie.net/pottermore/images/5/5e/Hufflepuff_crest.png/revision/latest/scale-to-width-down/180?cb=20111112232427",
+    ifelse(df_map$`What is your Hogwarts House?`== "Gryffindor", "http://leafletjs.com/examples/custom-icons/leaf-red.png",
+           ifelse(df_map$`What is your Hogwarts House?`== "Slytherin", "http://leafletjs.com/examples/custom-icons/leaf-green.png",
+                  "https://www.seekpng.com/png/small/152-1521662_harry-potter-ravenclaw-crest-mens-crewneck-sweatshirt-harry.png"))
+    
+  ),
+  iconWidth = 17, iconHeight = 30,
+  iconAnchorX = 17, iconAnchorY = 30
+)
+
+```
+
+```{r}
+
+#Trying some other leaflet things. This is working and tied to the functional hogIcons object:
+
+
+shiny_map2 <- df_map %>% 
+                  leaflet() %>% 
+                  addTiles() %>% 
+                  addMarkers(lng = df_map$Longitude, lat = df_map$Latitude, icon = hog_Icons)
+                              
+shiny_map2
 
 ```
 
