@@ -1,0 +1,150 @@
+---
+title: "Andrew_Old_Exploration"
+author: "Andrew Paterson"
+date: "March 5, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+library(tidyverse)
+library(sf)
+library(tmap)
+library(leaflet)
+library(ggrepel)
+library(ggspatial)
+library(RColorBrewer)
+library(raster)
+
+```
+
+```{r}
+
+us_states <- read_sf(".", layer = "cb_2017_us_state_500k")
+
+lat_long <- read_csv("long_lat.csv")
+
+st_crs(us_states) = 4326
+
+plot(us_states)
+
+states <- read_sf(".", layer = "cb_2017_us_state_500k") %>%
+  dplyr::select(NAME, geometry) %>% 
+  rename(State = NAME) %>%
+  st_simplify(dTolerance = 100) %>% 
+  st_transform(crs = 4326) #if no existing system, use st_crs. can also check system with st_crs(ca_eco)
+
+plot(states)
+
+#Trying with slightly different syntax learned in lab 7.
+
+states2 <- read_sf(dsn = 'states', layer = "cb_2017_us_state_500k") %>% 
+  dplyr::select(NAME) %>% 
+  st_simplify(dTolerance = 10) %>% 
+  st_transform(crs = 4326)
+
+#Having trouble figuring out how to withdraw/identify the information I need from the US States shapefiles. The parallels to when we did this in lab 7 aren't immediately obvious to me. Geometry isn't staying sticky.
+
+#Trying with a different shapefile
+
+states_sf <- read_sf(".", layer = "states")
+
+st_crs(states_sf) = 4326
+
+states3 <- read_sf(dsn = "states", layer = "states") %>% 
+  dplyr::select(STATE_NAME) %>% 
+  st_simplify(dTolerance = 10) %>% 
+  st_transform(crs = 4326)
+
+plot(states3)
+
+#Gives a weird kite-shaped map with "STATE_NAME" title. Geometries are not staying sticky.
+
+```
+
+GRACIE AND CHASE:
+
+Here is where the first map worked
+
+```{r}
+#PARTIAL SUCCESS HERE:
+#Trying with Allison's shapefiles from lab 7. Why do these stay sticky, but the esri and census bureau shapefiles I tried do not?
+
+states_map1 <- read_sf(dsn = "states", layer = "cb_2017_us_state_20m") %>% 
+  dplyr::select(NAME) %>%
+  filter(NAME != "Puerto Rico",
+         NAME != "Hawaii",
+         NAME != "Alaska") %>% 
+  st_transform(crs = 4326)
+
+plot(states_map1)
+
+```
+
+
+QUESTIONS FOR ALLISON: 
+
+Successful map above built with Allison's shapefiles from lab 7. Why do these stay sticky, but the esri and census bureau shapefiles I tried do not?
+```{r}
+
+#adding layer of points for home state. Proof of concept that it works with the voles layer from lab (see below)
+
+#How do we develop a map layer that shows a randomly generated point within each state, or centrally located within each state? To show the distribution of certain personality traits across the US. This page has coordinates for the geographic center in each state. Do you think it would be possible to make this into a csv and reference that as a layer?: https://en.wikipedia.org/wiki/List_of_geographic_centers_of_the_United_States.
+
+#If not, any other suggestions on where to start looking to convert our home state variable to a plottable variable? 
+
+#Anything we should keep in mind when trying to build a map with selectable features for use in a shiny app?
+
+
+tm_shape(states_map1)+
+  tm_fill()+
+  tm_shape(voles)+
+  tm_dots(size = 0.2)
+
+```
+
+BELOW HERE FOR LATEST PROGRESS:
+
+```{r}
+
+#This works! 
+
+# I added the long and lat coordinates for all people into this data frame.  I think we should use this version in shiny (shouldn't affect anything you've done, i just added columns)
+
+df_map <- read_csv("updatedfinal_AP_testing.csv") 
+
+shiny_map <- df_map %>% 
+                  leaflet() %>% 
+                  addTiles() %>% 
+                  addMarkers(lng = ~df_map$Longitude, lat = ~df_map$Latitude, icon = huff_icon)
+
+shiny_map
+
+```
+
+```{r}
+#For associating icons with the selection:
+
+#this works for just one icon
+huff_icon <- makeIcon(
+  iconUrl = "https://vignette.wikia.nocookie.net/pottermore/images/5/5e/Hufflepuff_crest.png/revision/latest/scale-to-width-down/180?cb=20111112232427",
+  iconWidth = 17, iconHeight = 30,
+  iconAnchorX = 17, iconAnchorY = 30,
+  shadowUrl = "https://vignette.wikia.nocookie.net/pottermore/images/5/5e/Hufflepuff_crest.png/revision/latest/scale-to-width-down/180?cb=20111112232427",
+  shadowWidth = 17, shadowHeight = 30,
+  shadowAnchorX = 4, shadowAnchorY = 62
+)
+
+#Now we're getting there! This changes the logo based on your answer. We may need to a do a nested if function here? 
+hog_Icons <- icons(
+  iconUrl = ifelse(df_map$`What is your Hogwarts House?` == "Hufflepuff",
+    "https://vignette.wikia.nocookie.net/pottermore/images/5/5e/Hufflepuff_crest.png/revision/latest/scale-to-width-down/180?cb=20111112232427",
+    "http://leafletjs.com/examples/custom-icons/leaf-red.png"
+  ),
+  iconWidth = 17, iconHeight = 30,
+  iconAnchorX = 17, iconAnchorY = 30
+)
