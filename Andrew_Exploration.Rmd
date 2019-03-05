@@ -107,9 +107,11 @@ tm_shape(states_map1)+
 
 ```
 
+BELOW HERE FOR LATEST PROGRESS:
+
 ```{r}
 
-#This works! But it is missing some aspects before it can be utilized in the shiny app.
+#This works! 
 
 # I added the long and lat coordinates for all people into this data frame.  I think we should use this version in shiny (shouldn't affect anything you've done, i just added columns)
 
@@ -165,7 +167,7 @@ hog_Icons <- icons(
 
 ```{r}
 
-#Trying some other leaflet things. This is working and tied to the functional hogIcons object:
+#This latest leaflet map is working and tied to the functional hogIcons object:
 
 
 shiny_map2 <- df_map %>% 
