@@ -11,7 +11,7 @@ library(ggplot2)
 
 #Code for formatting the dataframe:
 
-final_df <- read_csv("updatedfinal.csv")
+final_df <- read_csv("cleandata.csv")
 Danger_ratings <- c("50.4", "57.6", "2.4", "71.2", "68", "40", "3", "6.4", "69.2", "93.4", "23.4", "35.4", "34.2", "3", NA, "34.8", "29.2", "6.4", NA, "92.2", "5.4", "4.4", "15", "5.6", NA, "13.4", "3", "6", "6", "7.2", "9.4", "69.2", "58.8", "4.4", NA, "40.8", "9", "5.4", "2", "17.8", NA, "65", "8.4", "30.6", "3", "67.8", "25.2", "21.4", "92.6", "17.8", "16.8", "28.4", "23.8")
 final_df$Danger_Rating <- Danger_ratings
 
