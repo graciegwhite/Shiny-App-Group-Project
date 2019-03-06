@@ -7,7 +7,6 @@ library(readr)
 library(ggplot2)
 library(beyonce)
 library(plotly)
-library(gapminder)
 
 ##Copy and pasted from last lab, we can change all the details but keep some structure?
 # Define UI for application that draws a histogram
@@ -48,19 +47,18 @@ ui <- fluidPage(
              ),
              
              tabPanel("Enneagram Types",
-                      
                       sidebarLayout(
                         sidebarPanel(
-                          radioButtons("radio",
-                                       inputId = "column",
+                          radioButtons(
+                                      inputId = "chase",
                                        label = h3("Select Category"),
-                                       choices = list("Age", "Astrologial Sign", "Bren Specialization", "Dog or Cat", "Extroverted or Introverted", "Favorite Color", "Hogwarts House", "Myers-Briggs Personality Type", "Year"), width = 2
-                          )
+                                       choices = c("Age", "Astrological Sign", "Bren Specialization", "Dog or Cat", "Extroverted or Introverted", "Favorite Color", "Hogwarts House", "Myers-Briggs Personality Type", "State", "Year")
+                          ),
+                          uiOutput("secondSelection")
                         ),
                         mainPanel(
-                          plotOutput(outputId = "bar"),
-                          uiOutput("secondSelection"))
-                      )),
+                          plotOutput(outputId = "bar")
+                      ))),
              
              
              tabPanel("Patronuses",
@@ -121,24 +119,21 @@ server <- function(input, output) {
   
   output$secondSelection <- renderUI({
     selectInput(
+      inputId = "group",
       "Select",
       "Select Group",
-      choices = unique(chase_data==input$column)
+      choices = unique(chase_data[,input$chase])
     )
   })
   
+  
   output$bar <- renderPlot({
     chase_data %>% 
-<<<<<<< HEAD
       dplyr::filter(Enneagram != "NA") %>%
       dplyr::filter(Year != "NA") %>% 
       dplyr::filter(Age != "NA") %>% 
       dplyr::filter(`Myers-Briggs Personality Type` != "NA") %>% 
       dplyr::filter(State == "California") %>% 
-=======
-      filter(Enneagram != "NA") %>% 
-      filter(input$column == "secondSelection") %>% 
->>>>>>> e69ab6f66c7d182313bb14f9712935cd0b4ee729
       ggplot(aes(x = Enneagram, fill = Enneagram)) +
       geom_bar(color = "grey") +
       geom_text(stat = "count", 
