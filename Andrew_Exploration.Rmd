@@ -9,7 +9,12 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+Hogwarts House
+
 ```{r}
+
+df_map <- read_csv("updatedfinal_AP_testing.csv") 
+
 #Trying to make an if_else. It works! Just need to find and optimize images:
 
 hog_Icons <- icons(
@@ -37,6 +42,29 @@ shiny_map2 <- df_map %>%
                   addMarkers(lng = df_map$Longitude, lat = df_map$Latitude, icon = hog_Icons)
                               
 shiny_map2
+
+```
+
+Dog and Cat:
+
+```{r}
+
+dog_cat_Icons <- icons(
+  iconUrl = ifelse(df_map$`Are you a dog or cat person?` == "Dog",
+    "https://commons.wikimedia.org/wiki/File:201412_dog.png", "https://purepng.com/public/uploads/large/purepng.com-catcatcatsanimalspetscute-cat-251520163946lt4hc.png"),
+  iconWidth = 17, iconHeight = 30,
+  iconAnchorX = 17, iconAnchorY = 30)
+
+```
+
+```{r}
+
+shiny_map_dog <- df_map %>% 
+                  leaflet() %>% 
+                  addTiles() %>% 
+                  addMarkers(lng = df_map$Longitude, lat = df_map$Latitude, icon = dog_cat_Icons)
+
+shiny_map_dog
 
 ```
 
