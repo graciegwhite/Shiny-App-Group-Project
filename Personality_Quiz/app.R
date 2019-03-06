@@ -6,6 +6,8 @@ library(shinythemes)
 library(readr)
 library(ggplot2)
 library(beyonce)
+library(plotly)
+library(gapminder)
 
 ##Copy and pasted from last lab, we can change all the details but keep some structure?
 # Define UI for application that draws a histogram
@@ -18,6 +20,7 @@ final_df$Danger_Rating <- Danger_ratings
 
 #datapasta is magical and i can't beleive that worked wow
 final_df$Danger_Rating <- as.numeric(final_df$Danger_Rating)
+final_df$`What is your Enneagram personalty type?` <- as.character(final_df$`What is your Enneagram personalty type?`)
 #rename so less complicated
 colnames(final_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological Sign", "Home State", "Favorite Color", "Dog vs Cat", "Hogwarts House", "Patronus", "Introvert vs Extrovert", "Myers-Briggs", "Enneagram Type", "Enneagram Wing", "Favorite_R_Color", "Patronus Danger Rating")
 
@@ -51,7 +54,7 @@ ui <- fluidPage(
                           radioButtons("radio",
                                        inputId = "column",
                                        label = h3("Select Category"),
-                                       choices = list("Age", "Astrologial Sign", "Bren Specialization", "Dog or Cat", "Extroverted or Introverted", "Favorite Color", "Hogwarts House", "Myers-Briggs Personality Type", "Year")
+                                       choices = list("Age", "Astrologial Sign", "Bren Specialization", "Dog or Cat", "Extroverted or Introverted", "Favorite Color", "Hogwarts House", "Myers-Briggs Personality Type", "Year"), width = 2
                           )
                         ),
                         mainPanel(
@@ -80,7 +83,7 @@ ui <- fluidPage(
                         
                         mainPanel(
                           # Show a plot of the generated distribution
-                          plotOutput(outputId = "scatter"))
+                          plotlyOutput(outputId = "scatter"))
                       )),
              
              
@@ -151,27 +154,22 @@ server <- function(input, output) {
   
   
   #panel2 - patronuses
-  output$scatter <- renderPlot({
+  output$scatter <- renderPlotly({
     column <- sym(input$x)
     col <- sym(input$variable)
     
     
     
-    ggplot(data = final_df, aes(x = !!column, y = `Patronus Danger Rating`)) +
-      geom_point(aes(color = !!col), size = 3) +
+    patronus <- ggplot(data = final_df, aes(x = !!column, y = `Patronus Danger Rating`, label = Patronus)) +
+      geom_point(aes(color = !!col, text = Name), size = 4, alpha = .8) +
       theme_light() +
-      scale_color_manual(values = beyonce_palette(129)) +
-      labs(title = "Patronus Danger Ratings \n How do you compare?") +
-      theme(axis.text.x=element_text(angle=50, size=10, vjust=0.5), plot.title = element_text(hjust = 0.5, face = "bold", size = 15), axis.title.x = element_text(face = "bold"), axis.title.y = element_text(face = "bold"))
+      scale_color_manual(values = c("#EAB364","#A4CABC", "#B2473E", "#ACBD78")) +
+      labs(title = "Patronus Danger Ratings: \n How do you compare?") +
+      theme(axis.text.x=element_text(angle=50, size=10, vjust=0.5), plot.title = element_text(hjust = 0.5, face = "bold", size = 15), axis.title.x = element_text(face = "bold"), axis.title.y = element_text(face = "bold"),legend.title=element_text(size=8), legend.justification = "center", legend.text = element_text(size = 8),  legend.position=c(0.85, -0.75))
+    ggplotly(patronus, tooltip = c("Name", "color", "Patronus"), width = 600, height = 500)
   })
   
-  
-  
-  
-  
-  
-  
-  print("got here")
+
   
 }
 
