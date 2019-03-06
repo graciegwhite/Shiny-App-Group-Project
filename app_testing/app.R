@@ -5,9 +5,6 @@ library(tidyverse)
 library(shinythemes)
 library(readr)
 library(ggplot2)
-library(beyonce)
-library(plotly)
-library(gapminder)
 
 ##Copy and pasted from last lab, we can change all the details but keep some structure?
 # Define UI for application that draws a histogram
@@ -20,25 +17,22 @@ final_df$Danger_Rating <- Danger_ratings
 
 #datapasta is magical and i can't beleive that worked wow
 final_df$Danger_Rating <- as.numeric(final_df$Danger_Rating)
-final_df$`What is your Enneagram personalty type?` <- as.character(final_df$`What is your Enneagram personalty type?`)
 #rename so less complicated
-colnames(final_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological Sign", "Home State", "Favorite Color", "Dog vs Cat", "Hogwarts House", "Patronus", "Introvert vs Extrovert", "Myers-Briggs", "Enneagram Type", "Enneagram Wing", "Favorite_R_Color", "Patronus Danger Rating")
+colnames(final_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological_Sign", "Home_State", "Favorite_Color", "Dog_vs_Cat", "Hogwarts_House", "Patronus", "Introvert_vs_Extrovert", "Myers-Briggs", "Enneagram_Type", "Enneagram_Wing", "Favorite_R_Color", "Patronus_Danger_Rating")
 
+hog_Icons <- icons(
+  iconUrl = ifelse(df_map$`What is your Hogwarts House?` == "Hufflepuff",
+                   "https://vignette.wikia.nocookie.net/pottermore/images/5/5e/Hufflepuff_crest.png/revision/latest/scale-to-width-down/180?cb=20111112232427",
+                   ifelse(df_map$`What is your Hogwarts House?`== "Gryffindor", "http://leafletjs.com/examples/custom-icons/leaf-red.png",
+                          ifelse(df_map$`What is your Hogwarts House?`== "Slytherin", "http://leafletjs.com/examples/custom-icons/leaf-green.png",
+                                 "https://www.seekpng.com/png/small/152-1521662_harry-potter-ravenclaw-crest-mens-crewneck-sweatshirt-harry.png"))
+                   
+  ),
+  iconWidth = 17, iconHeight = 30,
+  iconAnchorX = 17, iconAnchorY = 30
+)
 
-#chase data (for panel 1)
-
-chase_data <- read_csv("Chase.csv") %>% 
-  rename("Hogwarts House" = House) %>% 
-  rename("Extroverted or Introverted" = Extroverted) %>% 
-  rename("Myers-Briggs Personality Type" = Briggs) %>% 
-  rename("Favorite Color" = Color) %>% 
-  rename("Astrological Sign" = Sign) %>% 
-  rename("Bren Specialization" = Specialization) %>% 
-  rename("Dog or Cat" = Dog)
-
-chase_data$Enneagram <- as.character(chase_data$Enneagram)
-
-
+df_map <- read_csv("updatedfinal_AP_testing.csv") 
 
 ui <- fluidPage(
   theme = shinytheme("flatly"),
@@ -66,19 +60,13 @@ ui <- fluidPage(
                       
                       sidebarLayout(
                         sidebarPanel(
-                          radioButtons(
-                                      inputId = "chase",
+                          radioButtons("radio",
+                                       inputId = "column",
                                        label = h3("Select Category"),
-<<<<<<< HEAD
-                                       choices = list("Age", "Astrologial Sign", "Bren Specialization", "Dog or Cat", "Extroverted or Introverted", "Favorite Color", "Hogwarts House", "Myers-Briggs Personality Type", "Year"), width = 2
-                          )
-                        ),
-=======
-                                       choices = c("Age", "Astrological Sign", "Bren Specialization", "Dog or Cat", "Extroverted or Introverted", "Favorite Color", "Hogwarts House", "Myers-Briggs Personality Type", "State", "Year")
+                                       choices = list("Age", "Astrological Sign", "Bren Specialization", "Dog or Cat", "Extroverted or Introverted", "Favorite Color", "Hogwarts House", "Myers-Briggs Personality Type", "Year")
                           ),
                           uiOutput("secondSelection")
-                          ),
->>>>>>> f80439024ead9db4b525d3c0050b318b2e681145
+                        ),
                         mainPanel(
                           plotOutput(outputId = "bar")
                         )
@@ -94,18 +82,18 @@ ui <- fluidPage(
                           radioButtons(
                             inputId = "x",
                             label = "Select one:",
-                            choices = c("Enneagram Type","Myers-Briggs","Specialization", "Astrological Sign"), 
+                            choices = c("Enneagram_Type","Myers-Briggs","Specialization", "Astrological_Sign"), 
                             selected = "Myers-Briggs"),
                           radioButtons(
                             inputId = "variable",
                             label = "Select one:",
-                            choices = c("Hogwarts House", "Dog vs Cat", "Introvert vs Extrovert"),
-                            selected = "Hogwarts House")
+                            choices = c("Hogwarts_House", "Dog_vs_Cat", "Introvert_vs_Extrovert"),
+                            selected = "Hogwarts_House")
                         ),
                         
                         mainPanel(
                           # Show a plot of the generated distribution
-                          plotlyOutput(outputId = "scatter"))
+                          plotOutput(outputId = "scatter"))
                       )),
              
              
@@ -115,14 +103,17 @@ ui <- fluidPage(
                       sidebarLayout(
                         sidebarPanel(
                           
-                          radioButtons("scattercolor", 
-                                       "Select scatterplot color:",
-                                       choices = c("red","blue","gray50"))
+                          radioButtons("radio",
+                                       inputId = "column",
+                                       label = h3("Where are my Hogwarts Housemates?"),
+                                       choices = list("Gryffindor", "Hufflepuff", "Slytherin", "Ravenclaw"),
+                          ),
+                          uiOutput("map")
                         ),
                         
-                        # Show a plot of the generated distribution
+                        #Show a map of Hogwarts People
                         mainPanel(
-                          plotOutput("tbd")
+                          leafletOutput(outputId = "map")
                         )
                       ))
              
@@ -144,19 +135,16 @@ server <- function(input, output) {
   output$secondSelection <- renderUI({
     selectInput(
       inputId = "group",
+      "Select",
       "Select Group",
-      choices = unique(chase_data[,input$chase])
+      choices = unique(chase_data[,input$column])
     )
   })
   
   output$bar <- renderPlot({
-    
     chase_data %>% 
-      dplyr::filter(Enneagram != "NA") %>%
-      dplyr::filter(Year != "NA") %>% 
-      dplyr::filter(Age != "NA") %>% 
-      dplyr::filter(`Myers-Briggs Personality Type` != "NA") %>% 
-      dplyr::filter(input$chase == "Hufflepuff") %>% 
+      filter(Enneagram != "NA") %>% 
+      filter(input$column == input$group) %>% 
       ggplot(aes(x = Enneagram, fill = Enneagram)) +
       geom_bar(color = "grey") +
       geom_text(stat = "count", 
@@ -180,24 +168,35 @@ server <- function(input, output) {
   
   
   #panel2 - patronuses
-  output$scatter <- renderPlotly({
+  output$scatter <- renderPlot({
     column <- sym(input$x)
     col <- sym(input$variable)
     
     
     
-    patronus <- ggplot(data = final_df, aes(x = !!column, y = `Patronus Danger Rating`, label = Patronus)) +
-      geom_point(aes(color = !!col, text = Name), size = 4, alpha = .8) +
-      theme_light() +
-      scale_color_manual(values = c("#EAB364","#A4CABC", "#B2473E", "#ACBD78")) +
-      labs(title = "Patronus Danger Ratings: \n How do you compare?") +
-      theme(axis.text.x=element_text(angle=50, size=10, vjust=0.5), plot.title = element_text(hjust = 0.5, face = "bold", size = 15), axis.title.x = element_text(face = "bold"), axis.title.y = element_text(face = "bold"),legend.title=element_text(size=8), legend.justification = "center", legend.text = element_text(size = 8),  legend.position=c(0.85, -0.75))
-    ggplotly(patronus, tooltip = c("Name", "color", "Patronus"), width = 600, height = 500)
+    ggplot(data = final_df, aes(x = !!column, y = Patronus_Danger_Rating)) +
+      geom_point(aes(color = !!col))
   })
   
-
+  #Panel3 - map
+  output$map <- renderLeaflet({
+    df_map <- data()
+    
+    m <- leaflet(data = df_map) %>% 
+      addTiles() %>% 
+      addMarkers(lng = df_map$Longitude, lat = df_map$Latitude, icon = hog_Icons)
+    m
+  })
+  
+  
+  
+  
+  
+  print("got here")
   
 }
 
 # Run the application 
 shinyApp(ui = ui, server = server)
+
+
