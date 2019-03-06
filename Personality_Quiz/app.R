@@ -20,6 +20,21 @@ final_df$Danger_Rating <- as.numeric(final_df$Danger_Rating)
 #rename so less complicated
 colnames(final_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological_Sign", "Home_State", "Favorite_Color", "Dog_vs_Cat", "Hogwarts_House", "Patronus", "Introvert_vs_Extrovert", "Myers-Briggs", "Enneagram_Type", "Enneagram_Wing", "Favorite_R_Color", "Patronus_Danger_Rating")
 
+#chase data (for panel 1)
+
+chase_data <- read_csv("Chase.csv") %>% 
+  rename("Hogwarts House" = House) %>% 
+  rename("Extroverted or Introverted" = Extroverted) %>% 
+  rename("Myers-Briggs Personality Type" = Briggs) %>% 
+  rename("Favorite Color" = Color) %>% 
+  rename("Astrological Sign" = Sign) %>% 
+  rename("Bren Specialization" = Specialization) %>% 
+  rename("Dog or Cat" = Dog)
+
+chase_data$Enneagram <- as.character(chase_data$Enneagram)
+
+
+
 ui <- fluidPage(
   theme = shinytheme("flatly"),
   
@@ -46,10 +61,10 @@ ui <- fluidPage(
                       
                       sidebarLayout(
                         sidebarPanel(
-                          radioButtons("radio",
-                                       inputId = "column",
+                          radioButtons(
+                                      inputId = "chase",
                                        label = h3("Select Category"),
-                                       choices = list("Age", "Astrological Sign", "Bren Specialization", "Dog or Cat", "Extroverted or Introverted", "Favorite Color", "Hogwarts House", "Myers-Briggs Personality Type", "Year")
+                                       choices = c("Age", "Astrological Sign", "Bren Specialization", "Dog or Cat", "Extroverted or Introverted", "Favorite Color", "Hogwarts House", "Myers-Briggs Personality Type", "State", "Year")
                           ),
                           uiOutput("secondSelection")
                           ),
@@ -118,16 +133,19 @@ server <- function(input, output) {
   output$secondSelection <- renderUI({
     selectInput(
       inputId = "group",
-      "Select",
       "Select Group",
-      choices = unique(chase_data[,input$column])
+      choices = unique(chase_data[,input$chase])
     )
   })
   
   output$bar <- renderPlot({
+    
     chase_data %>% 
-      filter(Enneagram != "NA") %>% 
-      filter(input$column == input$group) %>% 
+      dplyr::filter(Enneagram != "NA") %>%
+      dplyr::filter(Year != "NA") %>% 
+      dplyr::filter(Age != "NA") %>% 
+      dplyr::filter(`Myers-Briggs Personality Type` != "NA") %>% 
+      dplyr::filter(input$chase == "Hufflepuff") %>% 
       ggplot(aes(x = Enneagram, fill = Enneagram)) +
       geom_bar(color = "grey") +
       geom_text(stat = "count", 
