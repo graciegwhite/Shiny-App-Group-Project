@@ -49,12 +49,13 @@ ui <- fluidPage(
                           radioButtons("radio",
                                        inputId = "column",
                                        label = h3("Select Category"),
-                                       choices = list("Age", "Astrologial Sign", "Bren Specialization", "Dog or Cat", "Extroverted or Introverted", "Favorite Color", "Hogwarts House", "Myers-Briggs Personality Type", "Year")
-                          )
-                        ),
+                                       choices = list("Age", "Astrological Sign", "Bren Specialization", "Dog or Cat", "Extroverted or Introverted", "Favorite Color", "Hogwarts House", "Myers-Briggs Personality Type", "Year")
+                          ),
+                          uiOutput("secondSelection")
+                          ),
                         mainPanel(
-                          plotOutput(outputId = "bar"),
-                          uiOutput("secondSelection"))
+                          plotOutput(outputId = "bar")
+                        )
                       )),
              
              
@@ -116,16 +117,17 @@ server <- function(input, output) {
   
   output$secondSelection <- renderUI({
     selectInput(
+      inputId = "group",
       "Select",
       "Select Group",
-      choices = unique(chase_data==input$column)
+      choices = unique(chase_data[,input$column])
     )
   })
   
   output$bar <- renderPlot({
     chase_data %>% 
       filter(Enneagram != "NA") %>% 
-      filter(input$column == "secondSelection") %>% 
+      filter(input$column == input$group) %>% 
       ggplot(aes(x = Enneagram, fill = Enneagram)) +
       geom_bar(color = "grey") +
       geom_text(stat = "count", 
