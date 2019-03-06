@@ -41,6 +41,7 @@ ui <- fluidPage(
                       p("You get the idea...)"),
                       h2("Specialization Responses"),
                       h2("Hogwarts House Responses"),
+                      plotOutput(outputId = "house"),
                       h2("Enneagram Types"),
                       h2("Astrology Signs")
                       
@@ -117,6 +118,14 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
   
+  # graphs for intro page?
+  
+  output$house <- renderPlot({
+    final_df %>% 
+      ggplot(aes(x = `Hogwarts House`)) +
+      geom_bar()
+  })
+  
   output$secondSelection <- renderUI({
     selectInput(
       inputId = "group",
@@ -128,13 +137,18 @@ server <- function(input, output) {
   
   
   output$bar <- renderPlot({
-    chase_data %>% 
+    
+    chase <- input$chase
+    group <- input$group
+    
+    bar_data <- chase_data %>% 
       dplyr::filter(Enneagram != "NA") %>%
       dplyr::filter(Year != "NA") %>% 
       dplyr::filter(Age != "NA") %>% 
-      dplyr::filter(`Myers-Briggs Personality Type` != "NA") %>% 
-      dplyr::filter(State == "California") %>% 
-      ggplot(aes(x = Enneagram, fill = Enneagram)) +
+      dplyr::filter(`Myers-Briggs Personality Type` != "NA")
+      #dplyr::filter(chase == group)
+    
+      ggplot(bar_data[bar_data[[input$chase]] %in% (input$group),], aes(x = Enneagram, fill = Enneagram)) +
       geom_bar(color = "grey") +
       geom_text(stat = "count", 
                 aes(label =..count..), 
@@ -151,7 +165,8 @@ server <- function(input, output) {
             axis.ticks = element_blank(),
             axis.title = element_blank(),
             axis.text.y = element_blank(),
-            axis.text.x = element_text(color = "black", size = 10))
+            axis.text.x = element_text(color = "black", size = 10)) +
+      ggtitle(group)
     
   })
   
