@@ -145,7 +145,7 @@ server <- function(input, output) {
       dplyr::filter(Year != "NA") %>% 
       dplyr::filter(Age != "NA") %>% 
       dplyr::filter(`Myers-Briggs Personality Type` != "NA") %>% 
-      dplyr::filter(input$chase == "Hufflepuff") %>% 
+      dplyr::filter(State == "California") %>% 
       ggplot(aes(x = Enneagram, fill = Enneagram)) +
       geom_bar(color = "grey") +
       geom_text(stat = "count", 

@@ -82,7 +82,7 @@ bar_1 <- chase_data %>%
         axis.ticks = element_blank(),
         axis.title = element_blank(),
         axis.text.y = element_blank(),
-        axis.text.x = element_text(color = "black", size = 10)) +
+        axis.text.x = element_text(color = "black", size = 10))
  
         
 
@@ -117,5 +117,9 @@ hist_1 <- chase_data2 %>%
         
 
 hist_1
+
+bar_2 <- plot_ly(chase_data, labels = Enneagram, values = Enneagram, fill = Enneagram) %>% 
+  add_bars() %>% 
+  layout(showlegend = T, xaxis = list(showgrid))
 ```
 
