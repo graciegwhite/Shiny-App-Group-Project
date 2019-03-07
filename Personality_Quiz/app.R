@@ -215,8 +215,8 @@ server <- function(input, output) {
       geom_text(stat = "count", 
                 aes(label =..count..), 
                 color = "white",
-                nudge_y = -0.3,
-                size = 3,
+                nudge_y = -0.15,
+                size = 2.5,
                 vjust = "inward") +
       coord_polar(theta = "x") +
       theme_minimal() +
@@ -229,6 +229,8 @@ server <- function(input, output) {
             axis.text.y = element_blank(),
             axis.text.x = element_text(color = "black", size = 10)) +
       ggtitle(group) +
+        theme(plot.title = element_text(size = 30, face = "bold")) +
+        labs(fill = "Enneagram Type") +
         scale_fill_brewer(palette = "Paired")
     
   })
