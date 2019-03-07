@@ -21,18 +21,31 @@ final_df$Danger_Rating <- Danger_ratings
 final_df$Danger_Rating <- as.numeric(final_df$Danger_Rating)
 final_df$`What is your Enneagram personalty type?` <- as.character(final_df$`What is your Enneagram personalty type?`)
 #rename so less complicated
-colnames(final_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological Sign", "Home State", "Favorite Color", "Dog vs Cat", "Hogwarts House", "Patronus", "Introvert vs Extrovert", "Myers-Briggs", "Enneagram Type", "Enneagram Wing", "Favorite_R_Color", "Patronus Danger Rating")
+colnames(final_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological Sign", "Home State", "Favorite Color", "Dog vs Cat", "Hogwarts House", "Patronus", "Introvert vs Extrovert", "Myers-Briggs", "Enneagram Type", "Enneagram Wing", "Favorite_R_Color", "Patronus Danger Rating", "Latitude", "Longitude")
 # clean data
 clean_df <- read_csv("cleandata.csv")
 
 clean_df$Danger_rating <- Danger_ratings
 
-colnames(clean_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological Sign", "Home State", "Favorite Color", "Dog vs Cat", "Hogwarts House", "Patronus", "Introvert vs Extrovert", "Myers-Briggs", "Enneagram Type", "Enneagram Wing", "Favorite_R_Color", "Patronus Danger Rating")
+colnames(clean_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological Sign", "Home State", "Favorite Color", "Dog vs Cat", "Hogwarts House", "Patronus", "Introvert vs Extrovert", "Myers-Briggs", "Enneagram Type", "Enneagram Wing", "Favorite_R_Color", "Patronus Danger Rating", "Latitude", "Longitude")
 
 chase_data <- clean_df
 
 clean_df$`Enneagram Type` <- as.character(clean_df$`Enneagram Type`)
 chase_data$`Enneagram Type` <- as.character(chase_data$`Enneagram Type`)
+
+hog_Icons <- icons(
+  iconUrl = ifelse(df_map$`What is your Hogwarts House?` == "Hufflepuff",
+                   "https://vignette.wikia.nocookie.net/pottermore/images/5/5e/Hufflepuff_crest.png/revision/latest/scale-to-width-down/180?cb=20111112232427",
+                   ifelse(df_map$`What is your Hogwarts House?`== "Gryffindor", "http://leafletjs.com/examples/custom-icons/leaf-red.png",
+                          ifelse(df_map$`What is your Hogwarts House?`== "Slytherin", "http://leafletjs.com/examples/custom-icons/leaf-green.png",
+                                 "https://www.seekpng.com/png/small/152-1521662_harry-potter-ravenclaw-crest-mens-crewneck-sweatshirt-harry.png"))
+                   
+  ),
+  iconWidth = 17, iconHeight = 30,
+  iconAnchorX = 17, iconAnchorY = 30
+)
+
 
 ui <- fluidPage(
   theme = shinytheme("flatly"),
@@ -106,13 +119,15 @@ ui <- fluidPage(
                         sidebarPanel(
                           
                           radioButtons("scattercolor", 
-                                       "Select scatterplot color:",
-                                       choices = c("red","blue","gray50"))
+                                       "Where are my Hogwarts Housemates?",
+                                       choices = c("Gryffindor", "Hufflepuff", "Slytherin", "Ravenclaw"))
                         ),
                         
                         # Show a plot of the generated distribution
                         mainPanel(
-                          plotOutput("tbd")
+                        
+                          leafletOutput("mymap", height = 1000)
+                          
                         )
                       ))
              
@@ -252,7 +267,25 @@ server <- function(input, output) {
     ggplotly(patronus, tooltip = c("Name", "color", "Patronus"), width = 600, height = 500)
   })
   
-
+  #Panel 3: Map
+  
+  data <- reactive({
+    
+    x <- map_data
+    
+  })
+  
+  output$mymap <- renderLeaflet({
+    
+    map_data <- data()
+    
+    m <- leaflet() %>% 
+      addTiles() %>% 
+      addMarkers(lng = df_map$Longitude, lat = df_map$Latitude, icon = hog_Icons)
+    
+    m
+    
+  })
   
 }
 
