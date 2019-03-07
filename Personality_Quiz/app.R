@@ -31,7 +31,8 @@ clean_df$Danger_rating <- Danger_ratings
 
 colnames(clean_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological Sign", "Home State", "Favorite Color", "Dog vs Cat", "Hogwarts House", "Patronus", "Introvert vs Extrovert", "Myers-Briggs", "Enneagram Type", "Enneagram Wing", "Favorite_R_Color", "Latitude", "Longitude", "Patronus Danger Rating")
 
-chase_data <- clean_df
+chase_data <- clean_df %>% 
+  filter(`Enneagram Type` != "NA")
 
 df_map <- clean_df
 
@@ -251,7 +252,7 @@ server <- function(input, output) {
             axis.text.y = element_blank(),
             axis.text.x = element_text(color = "black", size = 10)) +
       ggtitle(group) +
-        theme(plot.title = element_text(size = 30, face = "bold")) +
+        theme(plot.title = element_text(size = 25, face = "bold")) +
         labs(fill = "Enneagram Type") +
         scale_fill_brewer(palette = "Paired")
     
