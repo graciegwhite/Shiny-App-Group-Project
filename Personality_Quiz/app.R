@@ -130,7 +130,9 @@ server <- function(input, output) {
       xlab("Bren Specialization") +
       ylab("Number of Respondants") +
       theme_minimal() +
-      theme(legend.position = "none")
+      theme(legend.position = "none") +
+      geom_text(stat='count', aes(label=..count..), vjust=-1) +
+      scale_fill_brewer(palette = "Set1")
     
   })
   
@@ -142,7 +144,8 @@ server <- function(input, output) {
       xlab("Hogwarts House") +
       ylab("Number of Respondants") +
       theme_minimal() +
-      theme(legend.position = "none")
+      theme(legend.position = "none") +
+       geom_text(stat='count', aes(label=..count..), vjust=-1)
       
   })
   
@@ -154,7 +157,9 @@ server <- function(input, output) {
        ylab("Number of Respondants") +
        theme_minimal() +
        theme(legend.position = "none") +
-       scale_y_continuous(breaks = seq(0,15, by = 5))
+       scale_y_continuous(breaks = seq(0,15, by = 5)) +
+       geom_text(stat='count', aes(label=..count..), vjust=-1) +
+       scale_fill_brewer(palette = "Set3")
      
    })
    
@@ -166,7 +171,9 @@ server <- function(input, output) {
        ylab("Number of Respondants") +
        theme_minimal() +
        theme(legend.position = "none") +
-       scale_y_continuous(breaks = seq(0,10, by = 2))
+       scale_y_continuous(breaks = seq(0,10, by = 2)) +
+       geom_text(stat='count', aes(label=..count..), vjust=-1) +
+       scale_fill_brewer(palette = "Paired")
      
    })
    
