@@ -262,9 +262,9 @@ server <- function(input, output) {
       geom_point(aes(color = !!col, text = Name), size = 4, alpha = .8) +
       theme_light() +
       scale_color_manual(values = c("#EAB364","#A4CABC", "#B2473E", "#ACBD78")) +
-      labs(title = "Patronus Danger Ratings: \n How do you compare?") +
-      theme(axis.text.x=element_text(angle=50, size=10, vjust=0.5), plot.title = element_text(hjust = 0.5, face = "bold", size = 15), axis.title.x = element_text(face = "bold"), axis.title.y = element_text(face = "bold"),legend.title=element_text(size=8), legend.justification = "center", legend.text = element_text(size = 8),  legend.position=c(0.85, -0.75))
-    ggplotly(patronus, tooltip = c("Name", "color", "Patronus"), width = 600, height = 500)
+      labs(title = "Patronus Danger Ratings: \n How do you compare?", y = "Patronus Danger Rating") +
+      theme(axis.text.x=element_text(angle=50, size=10, vjust=0.5), plot.title = element_text(face = "bold", size = 15), axis.title.x = element_text(face = "bold"), axis.title.y = element_text(face = "bold"),legend.title=element_text(size=8), legend.justification = "center", legend.text = element_text(size = 8),  legend.position=c(0.85, -0.75))
+    ggplotly(patronus, tooltip = c("Name", "color", "Patronus"), width = 700, height = 500)
   })
   
   #Panel 3: Map
