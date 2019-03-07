@@ -53,6 +53,7 @@ ggplot(final_df, aes(`Hogwarts House`, fill = `Hogwarts House`)) +
   geom_bar(width = 1) +
   scale_fill_manual(values = c("red3", "yellow1", "mediumblue", "green4"))
 
+cleandata <- read_csv("cleandata.csv")
 
 house_bar
 

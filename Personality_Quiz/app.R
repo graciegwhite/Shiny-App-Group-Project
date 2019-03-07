@@ -22,7 +22,17 @@ final_df$Danger_Rating <- as.numeric(final_df$Danger_Rating)
 final_df$`What is your Enneagram personalty type?` <- as.character(final_df$`What is your Enneagram personalty type?`)
 #rename so less complicated
 colnames(final_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological Sign", "Home State", "Favorite Color", "Dog vs Cat", "Hogwarts House", "Patronus", "Introvert vs Extrovert", "Myers-Briggs", "Enneagram Type", "Enneagram Wing", "Favorite_R_Color", "Patronus Danger Rating")
+# clean data
+clean_df <- read_csv("cleandata.csv")
 
+clean_df$Danger_rating <- Danger_ratings
+
+colnames(clean_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological Sign", "Home State", "Favorite Color", "Dog vs Cat", "Hogwarts House", "Patronus", "Introvert vs Extrovert", "Myers-Briggs", "Enneagram Type", "Enneagram Wing", "Favorite_R_Color", "Patronus Danger Rating")
+
+chase_data <- clean_df
+
+clean_df$`Enneagram Type` <- as.character(clean_df$`Enneagram Type`)
+chase_data$`Enneagram Type` <- as.character(chase_data$`Enneagram Type`)
 
 ui <- fluidPage(
   theme = shinytheme("flatly"),
@@ -56,7 +66,7 @@ ui <- fluidPage(
                           radioButtons(
                                       inputId = "chase",
                                        label = h3("Select Category"),
-                                       choices = c("Age", "Astrological Sign", "Bren Specialization", "Dog or Cat", "Extroverted or Introverted", "Favorite Color", "Hogwarts House", "Myers-Briggs Personality Type", "State", "Year")
+                                       choices = c("Age", "Astrological Sign", "Dog vs Cat", "Introvert vs Extrovert", "Favorite Color", "Hogwarts House","Home State", "Myers-Briggs", "Program", "Specialization")
                           ),
                           uiOutput("secondSelection")
                         ),
@@ -124,7 +134,7 @@ server <- function(input, output) {
   # graphs for intro page?
   
   output$specialization <- renderPlot({
-    final_df %>% 
+    clean_df %>% 
       ggplot(aes(x = Specialization, fill = Specialization)) +
       geom_bar(color = "grey", width = .8, size = 1) +
       xlab("Bren Specialization") +
@@ -137,7 +147,7 @@ server <- function(input, output) {
   })
   
    output$house <- renderPlot({
-    final_df %>% 
+    clean_df %>% 
       ggplot(aes(x = `Hogwarts House`, fill = `Hogwarts House`)) +
       geom_bar(color = "grey", width = .8, size = 1) +
       scale_fill_manual(values = c("red4", "yellow2", "midnightblue", "darkgreen")) +
@@ -150,21 +160,21 @@ server <- function(input, output) {
   })
   
    output$enneagram <- renderPlot({
-     final_df %>% 
+     clean_df %>% 
        ggplot(aes(x = `Enneagram Type`, fill = `Enneagram Type`)) +
        geom_bar(color = "grey", width = .8, size = 1) +
+       scale_fill_brewer(palette = "Set3") +
        xlab("Enneagram Type") +
        ylab("Number of Respondants") +
        theme_minimal() +
        theme(legend.position = "none") +
        scale_y_continuous(breaks = seq(0,15, by = 5)) +
-       geom_text(stat='count', aes(label=..count..), vjust=-1) +
-       scale_fill_brewer(palette = "Set3")
+       geom_text(stat='count', aes(label=..count..), vjust=-1)
      
    })
    
    output$astrology <- renderPlot({
-     final_df %>% 
+     clean_df %>% 
        ggplot(aes(x = `Astrological Sign`, fill = `Astrological Sign`)) +
        geom_bar(color = "grey", width = .8, size = 1) +
        xlab("Astrological Sign") +
@@ -193,13 +203,14 @@ server <- function(input, output) {
     group <- input$group
     
     bar_data <- chase_data %>% 
-      dplyr::filter(Enneagram != "NA") %>%
-      dplyr::filter(Year != "NA") %>% 
-      dplyr::filter(Age != "NA") %>% 
-      dplyr::filter(`Myers-Briggs Personality Type` != "NA")
-      #dplyr::filter(chase == group)
+      dplyr::filter(`Enneagram Type` != "NA") %>%
+      dplyr::filter(`Program` != "NA") %>% 
+      dplyr::filter(`Age` != "NA") %>% 
+      dplyr::filter(`Myers-Briggs` != "NA") %>% 
+      dplyr::filter(`Home State` != "NA") %>% 
+      dplyr::filter(`Favorite Color` != "NA")
     
-      ggplot(bar_data[bar_data[[input$chase]] %in% (input$group),], aes(x = Enneagram, fill = Enneagram)) +
+      ggplot(bar_data[bar_data[[input$chase]] %in% (input$group),], aes(x = `Enneagram Type`, fill = `Enneagram Type`)) +
       geom_bar(color = "grey") +
       geom_text(stat = "count", 
                 aes(label =..count..), 
@@ -217,7 +228,8 @@ server <- function(input, output) {
             axis.title = element_blank(),
             axis.text.y = element_blank(),
             axis.text.x = element_text(color = "black", size = 10)) +
-      ggtitle(group)
+      ggtitle(group) +
+        scale_fill_brewer(palette = "Paired")
     
   })
   
