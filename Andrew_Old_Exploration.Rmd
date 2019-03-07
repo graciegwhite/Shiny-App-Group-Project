@@ -148,3 +148,21 @@ hog_Icons <- icons(
   iconWidth = 17, iconHeight = 30,
   iconAnchorX = 17, iconAnchorY = 30
 )
+
+```
+
+Draft of shiny part: 
+
+```{r}
+
+  output$map <- renderLeaflet({
+    df_map <- data()
+    
+    m <- leaflet(data = df_map) %>% 
+      addTiles() %>% 
+      addMarkers(lng = df_map$Longitude, lat = df_map$Latitude, icon = hog_Icons)
+    m
+  })
+
+```
+
