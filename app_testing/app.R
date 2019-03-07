@@ -106,7 +106,7 @@ ui <- fluidPage(
                           radioButtons("radio",
                                        inputId = "column",
                                        label = h3("Where are my Hogwarts Housemates?"),
-                                       choices = list("Gryffindor", "Hufflepuff", "Slytherin", "Ravenclaw"),
+                                       choices = list("Gryffindor", "Hufflepuff", "Slytherin", "Ravenclaw")
                           ),
                           uiOutput("map")
                         ),
@@ -180,12 +180,10 @@ server <- function(input, output) {
   
   #Panel3 - map
   output$map <- renderLeaflet({
-    df_map <- data()
-    
-    m <- leaflet(data = df_map) %>% 
+    df_map %>% 
+      leaflet() %>% 
       addTiles() %>% 
       addMarkers(lng = df_map$Longitude, lat = df_map$Latitude, icon = hog_Icons)
-    m
   })
   
   

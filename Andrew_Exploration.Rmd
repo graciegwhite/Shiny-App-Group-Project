@@ -5,6 +5,19 @@ date: "February 6, 2019"
 output: html_document
 ---
 
+```{r}
+
+library(tidyverse)
+library(sf)
+library(tmap)
+library(leaflet)
+library(ggrepel)
+library(ggspatial)
+library(RColorBrewer)
+library(raster)
+
+```
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -51,7 +64,7 @@ Dog and Cat:
 
 dog_cat_Icons <- icons(
   iconUrl = ifelse(df_map$`Are you a dog or cat person?` == "Dog",
-    "https://commons.wikimedia.org/wiki/File:201412_dog.png", "https://purepng.com/public/uploads/large/purepng.com-catcatcatsanimalspetscute-cat-251520163946lt4hc.png"),
+    "https://pics.clipartpng.com/Cute_Dog_PNG_Clip_Art-2488.png", "https://purepng.com/public/uploads/large/purepng.com-catcatcatsanimalspetscute-cat-251520163946lt4hc.png"),
   iconWidth = 17, iconHeight = 30,
   iconAnchorX = 17, iconAnchorY = 30)
 
