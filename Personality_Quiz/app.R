@@ -8,6 +8,7 @@ library(ggplot2)
 library(beyonce)
 library(plotly)
 library(leaflet)
+library(viridis)
 
 ##Copy and pasted from last lab, we can change all the details but keep some structure?
 # Define UI for application that draws a histogram
@@ -65,10 +66,10 @@ ui <- fluidPage(
                       p("Followed by another paragraph of text..."),
                       h1("Here's a quick snapshot of our data:"),
                       p("You get the idea...)"),
-                      h2("Specialization Responses"),
-                      plotOutput(outputId = "specialization"),
                       h2("Hogwarts House Responses"),
                       plotOutput(outputId = "house"),
+                      h2("Specialization Responses"),
+                      plotOutput(outputId = "specialization"),
                       h2("Enneagram Types"),
                       plotOutput(outputId = "enneagram"),
                       h2("Astrology Signs"),
@@ -151,6 +152,21 @@ server <- function(input, output) {
   
   # graphs for intro page?
   
+  
+  output$house <- renderPlot({
+    clean_df %>% 
+      ggplot(aes(x = `Hogwarts House`, fill = `Hogwarts House`, na.rm = TRUE)) +
+      geom_bar(color = "grey", width = .8, size = 1, na.rm = TRUE) +
+      scale_fill_manual(values = c("#B2473E","#EAB364","midnightblue","darkgreen")) +
+      xlab("Hogwarts House") +
+      ylab("Number of Respondants") +
+      theme_minimal() +
+      theme(legend.position = "none") +
+      geom_text(stat='count', aes(label=..count..), vjust=-1)
+    
+  })
+  
+  
   output$specialization <- renderPlot({
     clean_df %>% 
       ggplot(aes(x = Specialization, fill = Specialization, na.rm = TRUE)) +
@@ -160,28 +176,16 @@ server <- function(input, output) {
       theme_minimal() +
       theme(legend.position = "none") +
       geom_text(stat='count', aes(label=..count..), vjust=-1) +
-      scale_fill_manual(values = beyonce_palette(74))
+      scale_fill_viridis(discrete = TRUE)
     
   })
   
-   output$house <- renderPlot({
-    clean_df %>% 
-      ggplot(aes(x = `Hogwarts House`, fill = `Hogwarts House`, na.rm = TRUE)) +
-      geom_bar(color = "grey", width = .8, size = 1, na.rm = TRUE) +
-      scale_fill_manual(values = c("#B2473E","#EAB364","midnightblue","darkgreen")) +
-      xlab("Hogwarts House") +
-      ylab("Number of Respondants") +
-      theme_minimal() +
-      theme(legend.position = "none") +
-       geom_text(stat='count', aes(label=..count..), vjust=-1)
-      
-  })
   
    output$enneagram <- renderPlot({
      clean_df %>% 
        ggplot(aes(x = `Enneagram Type`, fill = `Enneagram Type`, na.rm = TRUE)) +
        geom_bar(color = "grey", width = .8, size = 1, aes(na.rm = TRUE)) +
-       scale_fill_manual(values = beyonce_palette(64)) +
+       scale_fill_viridis(discrete = TRUE) +
        xlab("Enneagram Type") +
        ylab("Number of Respondants") +
        theme_minimal() +
@@ -192,7 +196,7 @@ server <- function(input, output) {
    })
    
    output$astrology <- renderPlot({
-     clean_df %>% 
+     subset(clean_df, !is.na(`Astrological Sign`)) %>% 
        ggplot(aes(x = `Astrological Sign`, fill = `Astrological Sign`, na.rm = TRUE)) +
        geom_bar(color = "grey", width = .8, size = 1) +
        xlab("Astrological Sign") +
@@ -201,7 +205,7 @@ server <- function(input, output) {
        theme(legend.position = "none") +
        scale_y_continuous(breaks = seq(0,10, by = 2)) +
        geom_text(stat='count', aes(label=..count..), vjust=-1) +
-       scale_fill_manual(values = beyonce_palette(71))
+       scale_fill_viridis(discrete = TRUE)
      
    })
    
