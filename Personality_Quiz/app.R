@@ -32,6 +32,8 @@ colnames(clean_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Ast
 
 chase_data <- clean_df
 
+df_map <- clean_df
+
 clean_df$`Enneagram Type` <- as.character(clean_df$`Enneagram Type`)
 chase_data$`Enneagram Type` <- as.character(chase_data$`Enneagram Type`)
 
