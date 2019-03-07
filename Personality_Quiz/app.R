@@ -22,13 +22,13 @@ final_df$Danger_Rating <- Danger_ratings
 final_df$Danger_Rating <- as.numeric(final_df$Danger_Rating)
 final_df$`What is your Enneagram personalty type?` <- as.character(final_df$`What is your Enneagram personalty type?`)
 #rename so less complicated
-colnames(final_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological Sign", "Home State", "Favorite Color", "Dog vs Cat", "Hogwarts House", "Patronus", "Introvert vs Extrovert", "Myers-Briggs", "Enneagram Type", "Enneagram Wing", "Favorite_R_Color", "Patronus Danger Rating", "Latitude", "Longitude")
+colnames(final_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological Sign", "Home State", "Favorite Color", "Dog vs Cat", "Hogwarts House", "Patronus", "Introvert vs Extrovert", "Myers-Briggs", "Enneagram Type", "Enneagram Wing", "Favorite_R_Color", "Latitude", "Longitude", "Patronus Danger Rating")
 # clean data
 clean_df <- read_csv("cleandata.csv")
 
 clean_df$Danger_rating <- Danger_ratings
 
-colnames(clean_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological Sign", "Home State", "Favorite Color", "Dog vs Cat", "Hogwarts House", "Patronus", "Introvert vs Extrovert", "Myers-Briggs", "Enneagram Type", "Enneagram Wing", "Favorite_R_Color", "Patronus Danger Rating", "Latitude", "Longitude")
+colnames(clean_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological Sign", "Home State", "Favorite Color", "Dog vs Cat", "Hogwarts House", "Patronus", "Introvert vs Extrovert", "Myers-Briggs", "Enneagram Type", "Enneagram Wing", "Favorite_R_Color", "Latitude", "Longitude", "Patronus Danger Rating")
 
 chase_data <- clean_df
 
@@ -151,22 +151,22 @@ server <- function(input, output) {
   
   output$specialization <- renderPlot({
     clean_df %>% 
-      ggplot(aes(x = Specialization, fill = Specialization)) +
-      geom_bar(color = "grey", width = .8, size = 1) +
+      ggplot(aes(x = Specialization, fill = Specialization, na.rm = TRUE)) +
+      geom_bar(color = "grey", width = .8, size = 1, na.rm = TRUE) +
       xlab("Bren Specialization") +
       ylab("Number of Respondants") +
       theme_minimal() +
       theme(legend.position = "none") +
       geom_text(stat='count', aes(label=..count..), vjust=-1) +
-      scale_fill_brewer(palette = "Set1")
+      scale_fill_manual(values = beyonce_palette(74))
     
   })
   
    output$house <- renderPlot({
     clean_df %>% 
-      ggplot(aes(x = `Hogwarts House`, fill = `Hogwarts House`)) +
-      geom_bar(color = "grey", width = .8, size = 1) +
-      scale_fill_manual(values = c("red4", "yellow2", "midnightblue", "darkgreen")) +
+      ggplot(aes(x = `Hogwarts House`, fill = `Hogwarts House`, na.rm = TRUE)) +
+      geom_bar(color = "grey", width = .8, size = 1, na.rm = TRUE) +
+      scale_fill_manual(values = c("#B2473E","#EAB364","midnightblue","darkgreen")) +
       xlab("Hogwarts House") +
       ylab("Number of Respondants") +
       theme_minimal() +
@@ -177,9 +177,9 @@ server <- function(input, output) {
   
    output$enneagram <- renderPlot({
      clean_df %>% 
-       ggplot(aes(x = `Enneagram Type`, fill = `Enneagram Type`)) +
-       geom_bar(color = "grey", width = .8, size = 1) +
-       scale_fill_brewer(palette = "Set3") +
+       ggplot(aes(x = !is.na(`Enneagram Type`), fill = `Enneagram Type`, na.rm = TRUE)) +
+       geom_bar(color = "grey", width = .8, size = 1, aes(na.rm = TRUE)) +
+       scale_fill_manual(values = beyonce_palette(64)) +
        xlab("Enneagram Type") +
        ylab("Number of Respondants") +
        theme_minimal() +
@@ -191,7 +191,7 @@ server <- function(input, output) {
    
    output$astrology <- renderPlot({
      clean_df %>% 
-       ggplot(aes(x = `Astrological Sign`, fill = `Astrological Sign`)) +
+       ggplot(aes(x = `Astrological Sign`, fill = `Astrological Sign`, na.rm = TRUE)) +
        geom_bar(color = "grey", width = .8, size = 1) +
        xlab("Astrological Sign") +
        ylab("Number of Respondants") +
@@ -199,7 +199,7 @@ server <- function(input, output) {
        theme(legend.position = "none") +
        scale_y_continuous(breaks = seq(0,10, by = 2)) +
        geom_text(stat='count', aes(label=..count..), vjust=-1) +
-       scale_fill_brewer(palette = "Paired")
+       scale_fill_manual(values = beyonce_palette(71))
      
    })
    
@@ -262,7 +262,7 @@ server <- function(input, output) {
     patronus <- ggplot(data = final_df, aes(x = !!column, y = `Patronus Danger Rating`, label = Patronus)) +
       geom_point(aes(color = !!col, text = Name), size = 4, alpha = .8) +
       theme_light() +
-      scale_color_manual(values = c("#EAB364","#A4CABC", "#B2473E", "#ACBD78")) +
+      scale_color_manual(values = c("#B2473E","#EAB364","#A4CABC","#ACBD78")) +
       labs(title = "Patronus Danger Ratings: \n How do you compare?", y = "Patronus Danger Rating") +
       theme(axis.text.x=element_text(angle=50, size=10, vjust=0.5), plot.title = element_text(face = "bold", size = 15), axis.title.x = element_text(face = "bold"), axis.title.y = element_text(face = "bold"),legend.title=element_text(size=8), legend.justification = "center", legend.text = element_text(size = 8),  legend.position=c(0.85, -0.75))
     ggplotly(patronus, tooltip = c("Name", "color", "Patronus"), width = 700, height = 500)
