@@ -7,6 +7,7 @@ library(readr)
 library(ggplot2)
 library(beyonce)
 library(plotly)
+library(leaflet)
 
 ##Copy and pasted from last lab, we can change all the details but keep some structure?
 # Define UI for application that draws a histogram
