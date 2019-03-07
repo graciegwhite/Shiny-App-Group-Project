@@ -176,8 +176,8 @@ server <- function(input, output) {
   })
   
    output$enneagram <- renderPlot({
-     clean_df %>% 
-       ggplot(aes(x = !is.na(`Enneagram Type`), fill = `Enneagram Type`, na.rm = TRUE)) +
+     subset(clean_df, !is.na(`Enneagram Type`)) %>% 
+       ggplot(aes(x = `Enneagram Type`, fill = `Enneagram Type`, na.rm = TRUE)) +
        geom_bar(color = "grey", width = .8, size = 1, aes(na.rm = TRUE)) +
        scale_fill_manual(values = beyonce_palette(64)) +
        xlab("Enneagram Type") +
@@ -190,7 +190,7 @@ server <- function(input, output) {
    })
    
    output$astrology <- renderPlot({
-     clean_df %>% 
+     subset(clean_df, !is.na(`Astrological Sign`)) %>% 
        ggplot(aes(x = `Astrological Sign`, fill = `Astrological Sign`, na.rm = TRUE)) +
        geom_bar(color = "grey", width = .8, size = 1) +
        xlab("Astrological Sign") +
