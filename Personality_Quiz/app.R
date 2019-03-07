@@ -183,8 +183,8 @@ server <- function(input, output) {
   
    output$enneagram <- renderPlot({
      clean_df %>% 
-       ggplot(aes(x = `Enneagram Type`, fill = `Enneagram Type`, na.rm = TRUE)) +
-       geom_bar(color = "grey", width = .8, size = 1, aes(na.rm = TRUE)) +
+       ggplot(aes(x = `Enneagram Type`, fill = `Enneagram Type`)) +
+       geom_bar(color = "grey", width = .8, size = 1) +
        scale_fill_viridis(discrete = TRUE) +
        xlab("Enneagram Type") +
        ylab("Number of Respondants") +
@@ -197,7 +197,7 @@ server <- function(input, output) {
    
    output$astrology <- renderPlot({
      subset(clean_df, !is.na(`Astrological Sign`)) %>% 
-       ggplot(aes(x = `Astrological Sign`, fill = `Astrological Sign`, na.rm = TRUE)) +
+       ggplot(aes(x = `Astrological Sign`, fill = `Astrological Sign`)) +
        geom_bar(color = "grey", width = .8, size = 1) +
        xlab("Astrological Sign") +
        ylab("Number of Respondants") +
