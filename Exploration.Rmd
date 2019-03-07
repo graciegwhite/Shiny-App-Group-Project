@@ -47,8 +47,12 @@ sign_house
 ```{r}
 # Basic data exploring - histograms and what not
 
-house_bar <- ggplot(feb_6_test, aes(x = House)) +
-  geom_bar()
+colnames(final_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Astrological Sign", "Home State", "Favorite Color", "Dog vs Cat", "Hogwarts House", "Patronus", "Introvert vs Extrovert", "Myers-Briggs", "Enneagram Type", "Enneagram Wing", "Favorite_R_Color", "Patronus Danger Rating")
+
+ggplot(final_df, aes(`Hogwarts House`, fill = `Hogwarts House`)) +
+  geom_bar(width = 1) +
+  scale_fill_manual(values = c("red3", "yellow1", "mediumblue", "green4"))
+
 
 house_bar
 

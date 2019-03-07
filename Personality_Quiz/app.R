@@ -40,10 +40,13 @@ ui <- fluidPage(
                       h1("Here's a quick snapshot of our data:"),
                       p("You get the idea...)"),
                       h2("Specialization Responses"),
+                      plotOutput(outputId = "specialization"),
                       h2("Hogwarts House Responses"),
                       plotOutput(outputId = "house"),
                       h2("Enneagram Types"),
-                      h2("Astrology Signs")
+                      plotOutput(outputId = "enneagram"),
+                      h2("Astrology Signs"),
+                      plotOutput(outputId = "astrology")
                       
              ),
              
@@ -120,12 +123,53 @@ server <- function(input, output) {
   
   # graphs for intro page?
   
-  output$house <- renderPlot({
+  output$specialization <- renderPlot({
     final_df %>% 
-      ggplot(aes(x = `Hogwarts House`)) +
-      geom_bar()
+      ggplot(aes(x = Specialization, fill = Specialization)) +
+      geom_bar(color = "grey", width = .8, size = 1) +
+      xlab("Bren Specialization") +
+      ylab("Number of Respondants") +
+      theme_minimal() +
+      theme(legend.position = "none")
+    
   })
   
+   output$house <- renderPlot({
+    final_df %>% 
+      ggplot(aes(x = `Hogwarts House`, fill = `Hogwarts House`)) +
+      geom_bar(color = "grey", width = .8, size = 1) +
+      scale_fill_manual(values = c("red4", "yellow2", "midnightblue", "darkgreen")) +
+      xlab("Hogwarts House") +
+      ylab("Number of Respondants") +
+      theme_minimal() +
+      theme(legend.position = "none")
+      
+  })
+  
+   output$enneagram <- renderPlot({
+     final_df %>% 
+       ggplot(aes(x = `Enneagram Type`, fill = `Enneagram Type`)) +
+       geom_bar(color = "grey", width = .8, size = 1) +
+       xlab("Enneagram Type") +
+       ylab("Number of Respondants") +
+       theme_minimal() +
+       theme(legend.position = "none") +
+       scale_y_continuous(breaks = seq(0,15, by = 5))
+     
+   })
+   
+   output$astrology <- renderPlot({
+     final_df %>% 
+       ggplot(aes(x = `Astrological Sign`, fill = `Astrological Sign`)) +
+       geom_bar(color = "grey", width = .8, size = 1) +
+       xlab("Astrological Sign") +
+       ylab("Number of Respondants") +
+       theme_minimal() +
+       theme(legend.position = "none") +
+       scale_y_continuous(breaks = seq(0,10, by = 2))
+     
+   })
+   
   output$secondSelection <- renderUI({
     selectInput(
       inputId = "group",
