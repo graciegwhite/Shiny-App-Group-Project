@@ -40,10 +40,10 @@ clean_df$`Enneagram Type` <- as.character(clean_df$`Enneagram Type`)
 chase_data$`Enneagram Type` <- as.character(chase_data$`Enneagram Type`)
 
 hog_Icons <- icons(
-  iconUrl = ifelse(df_map$`What is your Hogwarts House?` == "Hufflepuff",
+  iconUrl = ifelse(df_map$`Hogwarts House` == "Hufflepuff",
                    "https://vignette.wikia.nocookie.net/pottermore/images/5/5e/Hufflepuff_crest.png/revision/latest/scale-to-width-down/180?cb=20111112232427",
-                   ifelse(df_map$`What is your Hogwarts House?`== "Gryffindor", "http://leafletjs.com/examples/custom-icons/leaf-red.png",
-                          ifelse(df_map$`What is your Hogwarts House?`== "Slytherin", "http://leafletjs.com/examples/custom-icons/leaf-green.png",
+                   ifelse(df_map$`Hogwarts House`== "Gryffindor", "http://leafletjs.com/examples/custom-icons/leaf-red.png",
+                          ifelse(df_map$`Hogwarts House`== "Slytherin", "http://leafletjs.com/examples/custom-icons/leaf-green.png",
                                  "https://www.seekpng.com/png/small/152-1521662_harry-potter-ravenclaw-crest-mens-crewneck-sweatshirt-harry.png"))
                    
   ),
@@ -288,7 +288,7 @@ server <- function(input, output) {
     map_data <- data()
     
     m <- leaflet() %>% 
-      addTiles() %>% 
+      addProviderTiles(providers$Esri.NatGeoWorldMap) %>% 
       addMarkers(lng = df_map$Longitude, lat = df_map$Latitude, icon = hog_Icons)
     
     m
