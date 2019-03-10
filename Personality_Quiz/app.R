@@ -56,6 +56,9 @@ hog_Icons <- icons(
   iconAnchorX = 17, iconAnchorY = 30
 )
 
+pal <- colorFactor(c("red", "goldenrod1", "dodgerblue3", "darkgreen"), domain = c("Slytherin", "Gryffindor", "Hufflepuff", "Ravenclaw"))
+
+pal2 <- colorFactor(c("rosybrown3", "black"), domain = c("Dog", "Cat"))
 
 ui <- fluidPage(
   theme = shinytheme("flatly"),
@@ -136,17 +139,18 @@ ui <- fluidPage(
                                              "Where are the dog and cat people?",
                                              choices = list("Dog" = "Dog", 
                                                             "Cat" = "Cat")),
-                          checkboxGroupInput("spec", 
-                                             "Where are my specialization peers?",
-                                             choices = list("CMRM" = "CMRM", 
-                                                            "EC" = "EC",
-                                                            "CEM" = "CEM",
-                                                            "PPR" = "PPR",
-                                                            "CP" = "CP",
-                                                            "WRM" = "WRM",
-                                                            "EPE" = "EPE",
-                                                            "Data Science" = "Data Science",
-                                                            "Community Ecology" = "Community Ecology"))
+                          radioButtons(
+                            inputId = "spec",
+                            label = "Where are my specialization peers?",
+                            choices = c("CMRM", 
+                                        "EC",
+                                        "CEM",
+                                        "PPR",
+                                        "CP",
+                                        "WRM",
+                                        "EPE",
+                                        "Data Science",
+                                        "Community Ecology"))
                           
                         ),
                         
@@ -315,9 +319,14 @@ server <- function(input, output) {
     
     leaflet() %>% 
       addProviderTiles(providers$Esri.NatGeoWorldMap) %>% 
-      addMarkers(data = dc_data) %>% 
-      addMarkers(data = hog_data) %>%
-      addMarkers(data = spec_data) %>%
+      addCircleMarkers(
+        data = dc_data,
+        radius = ~ifelse(dog_vs_cat == "dog", 6, 10),
+        color = ~pal2(dog_vs_cat),
+        stroke = FALSE, fillOpacity = 0.5
+      ) %>% 
+      addCircleMarkers(data = hog_data, color = ~pal(hogwarts_house)) %>%
+      addMarkers(data = spec_data, label = ~spec_data$name) %>%
       setView(lng=-95.822841, lat= 38.515979, zoom = 4)
     
     
