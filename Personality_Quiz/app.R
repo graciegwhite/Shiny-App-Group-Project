@@ -68,7 +68,7 @@ ui <- fluidPage(
   
   navbarPage("Navigation:",
              
-             tabPanel("Intoduction",
+             tabPanel("Introduction",
                       h1("Welcome!"),
                       h2("How it all began..."),
                       p("The night before the Earth System Science final exam, a group of weary MESMs grew tired of calculating adiabatic lift rates, and instead decided to take as many fun online personality quizzes as possible. While comparing the results, the group realized that these quizes had the potential to make a really awesome dataset, they just needed more respondants. In a quest for an n>30, they started spamming the 2020 cohort on multiple platforms, and responses began to flow in."),
