@@ -116,6 +116,8 @@ ui <- fluidPage(
                         ),
                         
                         mainPanel(
+                          h2("Hover your mouse over the different points to see details about your classmates!"),
+                          p("Note: Patronus dangers ratings were determined through a scientifically rigorous process that may or may not have occured during a watch party for The Bachelor and after a bottle of wine."),
                           # Show a plot of the generated distribution
                           plotlyOutput(outputId = "scatter"))
                       )),
