@@ -66,15 +66,14 @@ ui <- fluidPage(
   # Application title
   titlePanel("Bren Student Personality Quiz Data"),
   
-  navbarPage("Expecto Enneagram!",
+  navbarPage("Navigation:",
              
-             tabPanel("Summary",
+             tabPanel("Intoduction",
                       h1("Welcome!"),
                       h2("How it all began..."),
-                      p("Then some paragraph text."),
-                      p("Followed by another paragraph of text..."),
-                      h1("Here's a quick snapshot of our data:"),
-                      p("You get the idea...)"),
+                      p("The night before the Earth System Science final exam, a group of weary MESMs grew tired of calculating adiabatic lift rates, and instead decided to take as many fun online personality quizzes as possible. While comparing the results, the group realized that these quizes had the potential to make a really awesome dataset, they just needed more respondants. In a quest for an n>30, they started spamming the 2020 cohort on multiple platforms, and responses began to flow in."),
+                      p("We hoped to answer questions such as, is everyone from New England a Slytherin? Can we predict how dangerous your patronus is? Do CMRMs share an enneagram type? Do astrological signs influence literally anything? Turns out we can't really answer any of these questions, but we hope you have as much fun exploring the results as we did!"),
+                      h1("Here's a quick snapshot of some of our data:"),
                       h2("Hogwarts House Responses"),
                       plotOutput(outputId = "house"),
                       h2("Specialization Responses"),
@@ -86,7 +85,7 @@ ui <- fluidPage(
                       
              ),
              
-             tabPanel("Enneagram Types",
+             tabPanel("Expecto Enneagram!",
                       sidebarLayout(
                         sidebarPanel(
                           radioButtons(
@@ -101,7 +100,7 @@ ui <- fluidPage(
                       ))),
              
              
-             tabPanel("Patronuses",
+             tabPanel("Patronus Danger Ratings",
                       
                       # Sidebar with a slider input for number of bins 
                       sidebarLayout(
@@ -125,7 +124,7 @@ ui <- fluidPage(
                       )),
              
              
-             tabPanel("Spatial Data",
+             tabPanel("Where in the World are the Hufflepufffs?",
                       
                       # Sidebar with a slider input for number of bins 
                       sidebarLayout(
