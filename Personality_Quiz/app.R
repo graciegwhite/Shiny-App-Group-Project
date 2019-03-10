@@ -9,6 +9,8 @@ library(beyonce)
 library(plotly)
 library(leaflet)
 library(viridis)
+library(janitor)
+library(sf)
 
 ##Copy and pasted from last lab, we can change all the details but keep some structure?
 # Define UI for application that draws a histogram
@@ -34,7 +36,10 @@ colnames(clean_df) <- c("Time", "Name", "Program", "Specialization", "Age", "Ast
 chase_data <- clean_df %>% 
   filter(`Enneagram Type` != "NA")
 
-df_map <- clean_df
+df_map <- clean_df%>% 
+  filter(`Latitude` != "NA")
+
+df_sf <- st_as_sf(df_map, coords = c("Longitude", "Latitude"), crs = 4326)
 
 clean_df$`Enneagram Type` <- as.character(clean_df$`Enneagram Type`)
 chase_data$`Enneagram Type` <- as.character(chase_data$`Enneagram Type`)
@@ -123,15 +128,32 @@ ui <- fluidPage(
                       sidebarLayout(
                         sidebarPanel(
                           
-                          radioButtons("scattercolor", 
-                                       "Where are my Hogwarts Housemates?",
-                                       choices = c("Gryffindor", "Hufflepuff", "Slytherin", "Ravenclaw"))
+                          checkboxGroupInput("hogwarts", 
+                                             "Where are my Hogwarts Housemates?",
+                                             choices = list("Gryffindor" = "Gryffindor", 
+                                                            "Hufflepuff" = "Hufflepuff", "Slytherin" = "Slytherin", "Ravenclaw" = "Ravenclaw")),
+                          checkboxGroupInput("dog_cat", 
+                                             "Where are the dog and cat people?",
+                                             choices = list("Dog" = "Dog", 
+                                                            "Cat" = "Cat")),
+                          checkboxGroupInput("spec", 
+                                             "Where are my specialization peers?",
+                                             choices = list("CMRM" = "CMRM", 
+                                                            "EC" = "EC",
+                                                            "CEM" = "CEM",
+                                                            "PPR" = "PPR",
+                                                            "CP" = "CP",
+                                                            "WRM" = "WRM",
+                                                            "EPE" = "EPE",
+                                                            "Data Science" = "Data Science",
+                                                            "Community Ecology" = "Community Ecology"))
+                          
                         ),
                         
                         # Show a plot of the generated distribution
                         mainPanel(
                         
-                          leafletOutput("mymap", height = 1000)
+                          leafletOutput("mymap", height = 500)
                           
                         )
                       ))
@@ -277,21 +299,27 @@ server <- function(input, output) {
   
   #Panel 3: Map
   
-  data <- reactive({
-    
-    x <- map_data
-    
-  })
-  
   output$mymap <- renderLeaflet({
     
-    map_data <- data()
+    hog_data <- df_sf %>% 
+      clean_names() %>% 
+      filter(hogwarts_house %in% input$hogwarts)
     
-    m <- leaflet() %>% 
+    dc_data <- df_sf %>% 
+      clean_names() %>% 
+      filter(dog_vs_cat %in% input$dog_cat)
+    
+    spec_data <- df_sf %>% 
+      clean_names() %>% 
+      filter(specialization %in% input$spec)
+    
+    leaflet() %>% 
       addProviderTiles(providers$Esri.NatGeoWorldMap) %>% 
-      addMarkers(lng = df_map$Longitude, lat = df_map$Latitude, icon = hog_Icons)
+      addMarkers(data = dc_data) %>% 
+      addMarkers(data = hog_data) %>%
+      addMarkers(data = spec_data) %>%
+      setView(lng=-95.822841, lat= 38.515979, zoom = 4)
     
-    m
     
   })
   
