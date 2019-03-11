@@ -110,7 +110,8 @@ ui <- fluidPage(
                           p("Type 8, The Challenger, is self-confident, decisive, willful, and confrontational."),
                           p("Type 9, The Peacemaker, is receptive, reassuring, complacent, and resigned."),
                           p("To learn more, visit the Enneagram Center: https://www.enneagraminstitute.com/"),
-                          p("To take the test, visit: https://www.eclecticenergies.com/enneagram/test")
+                          p("To take the test, visit: https://www.eclecticenergies.com/enneagram/test"),
+                          p("For some famous enneagram types: http://pstypes.blogspot.com/2009/03/famous-enneagram-types.html")
                       ))),
              
              
